@@ -28,9 +28,9 @@ rl
             if (res.error != null)
                 console.log(CliColor.red(`\n${res.error}\n`));
             else if (flags.withAst)
-                console.log(`\n${res.ast}\n`);
+                console.log(`\n${res.astStr}\n`);
             else
-                console.log(`= ${res.valueStr}\n`);
+                console.log(`= ${res.resultStr}\n`);
         }
 
         rl.prompt();

@@ -1,4 +1,3 @@
-/// <reference path="typings/tsd.d.ts" />
 var _ = require("lodash");
 var ParserScope = require("./src/parser-scope");
 exports.ParserScope = ParserScope;
@@ -70,9 +69,9 @@ function evaluate(expr, options) {
     return {
         expr: expr,
         program: program,
-        value: error != null ? null : value,
-        valueStr: error != null ? null : formatValue(value),
-        ast: error != null || !options.withAst || !program ? null : JSON.stringify(program.getDto(options.astWithLocs), null, "  "),
+        result: error != null ? null : value,
+        resultStr: error != null ? null : formatValue(value),
+        astStr: error != null || !options.withAst || !program ? null : JSON.stringify(program.getDto(options.astWithLocs), null, "  "),
         error: error != null ? String(error) : null
     };
 }
@@ -98,3 +97,4 @@ function formatValue(value) {
     else
         return JSON.stringify(value, null, "  ");
 }
+//# sourceMappingURL=index.js.map

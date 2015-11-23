@@ -4,3 +4,4 @@ obj
 node_modules
 .DS_Store
 .ntvs_analysis.dat
+npm-debug.log

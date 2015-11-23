@@ -402,3 +402,4 @@ var SetVarExpr = (function (_super) {
     return SetVarExpr;
 })(Expr);
 exports.SetVarExpr = SetVarExpr;
+//# sourceMappingURL=parser-scope.js.map

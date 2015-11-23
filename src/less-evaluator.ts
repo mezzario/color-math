@@ -1,4 +1,6 @@
-﻿import * as _ from "lodash";
+﻿/// <reference path="../typings/tsd.d.ts" />
+
+import * as _ from "lodash";
 import * as ParserScope from "./parser-scope";
 import { Evaluator } from "./eval-scope";
 import { BlendMode, throwError } from "./utils";

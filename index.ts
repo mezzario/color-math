@@ -1,6 +1,4 @@
-﻿/// <reference path="typings/tsd.d.ts" />
-
-import * as _ from "lodash";
+﻿import * as _ from "lodash";
 import * as ParserScope from "./src/parser-scope";
 import { ColorScale, Evaluator, CoreEvaluator } from "./src/eval-scope";
 import { LessEvaluator } from "./src/less-evaluator";
@@ -57,9 +55,9 @@ export interface EvaluateOptions {
 export interface EvaluateResult {
     expr: string;
     program: ParserScope.Program;
-    value;
-    valueStr: string;
-    ast: string;
+    result;
+    resultStr: string;
+    astStr: string;
     error: string;
 }
 
@@ -87,9 +85,9 @@ export function evaluate(expr: string, options?: EvaluateOptions) {
     return <EvaluateResult>{
         expr: expr,
         program: program,
-        value: error != null ? null : value,
-        valueStr: error != null ? null : formatValue(value),
-        ast: error != null || !options.withAst || !program ? null : JSON.stringify(program.getDto(options.astWithLocs), null, "  "),
+        result: error != null ? null : value,
+        resultStr: error != null ? null : formatValue(value),
+        astStr: error != null || !options.withAst || !program ? null : JSON.stringify(program.getDto(options.astWithLocs), null, "  "),
         error: error != null ? String(error) : null
     };
 }

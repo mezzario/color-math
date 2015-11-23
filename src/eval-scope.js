@@ -777,3 +777,4 @@ var CoreEvaluator = (function (_super) {
     return CoreEvaluator;
 })(Evaluator);
 exports.CoreEvaluator = CoreEvaluator;
+//# sourceMappingURL=eval-scope.js.map
