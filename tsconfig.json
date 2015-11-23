@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "jsx": "react",
+        "removeComments": false,
+        "sourceMap": true,
+        "inlineSourceMap": true
+    },
+    "exclude": [
+        ".vs",
+        "node_modules",
+        "bin",
+        "obj"
+    ]
+}
