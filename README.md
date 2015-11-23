@@ -10,7 +10,7 @@ Quick info:
 Interpreter will start. Type expressions like:
 
 * `red | green` - mix colors
-* `red @a 30%` - set color alpha channel
+* `red @a 30%` - set color's alpha channel
 * `(#222 + #444) / 2` - arithmetic operations with colors and numbers
 * `...`
 
