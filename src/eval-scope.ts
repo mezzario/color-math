@@ -210,7 +210,7 @@ export abstract class Evaluator {
                 if (isNumbers)
                     return this.evalNumbersSubtraction(node);
                 else if (isColors)
-                    return this.evalNumbersSubtraction(node);
+                    return this.evalSubtractBlend(node);
                 else if (isColorAndNumber)
                     return this.evalColorAndNumberSubtraction(node);
                 else
@@ -230,7 +230,7 @@ export abstract class Evaluator {
                 if (isNumbers)
                     return this.evalNumbersDivision(node);
                 else if (isColors)
-                    return this.evalNumbersDivision(node);
+                    return this.evalDivideBlend(node);
                 else if (isColorAndNumber)
                     return this.evalColorAndNumberDivision(node);
                 else

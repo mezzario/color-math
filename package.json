@@ -1,42 +1,42 @@
 {
-    "name": "color-math",
-    "version": "1.0.1",
-    "description": "expressions to manipulate colors",
-    "keywords": [
-        "color",
-        "math",
-        "expressions",
-        "manipulate"
-    ],
-    "author": {
-        "name": "Eugene Baranchuk",
-        "email": "vencedor@gmail.com"
-    },
-    "license": "MIT",
-    "homepage": "https://github.com/mezzario/color-math",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mezzario/color-math.git"
-    },
-    "bugs": {
-        "url": "https://github.com/mezzario/color-math/issues"
-    },
-    "dependencies": {
-        "chroma-js": "latest",
-        "cli-color": "latest",
-        "fs": "latest",
-        "fs-extra": "latest",
-        "lodash": "latest"
-    },
-    "devDependencies": {
-        "jison": "latest"
-    },
-    "main": "index",
-    "engines": {
-        "node": ">= 0.6.x"
-    },
-    "scripts": {
-        "build:parser": "jison ./src/grammar.jison -o ./src/parser.js -p lalr",
-        "start": "node ./src/repl"
-    }
+  "name": "color-math",
+  "version": "1.0.2",
+  "description": "expressions to manipulate colors",
+  "keywords": [
+    "color",
+    "math",
+    "expressions",
+    "manipulate"
+  ],
+  "author": {
+    "name": "Eugene Baranchuk",
+    "email": "vencedor@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/mezzario/color-math",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mezzario/color-math.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mezzario/color-math/issues"
+  },
+  "dependencies": {
+    "chroma-js": "latest",
+    "cli-color": "latest",
+    "fs": "latest",
+    "fs-extra": "latest",
+    "lodash": "latest"
+  },
+  "devDependencies": {
+    "jison": "latest"
+  },
+  "main": "index",
+  "engines": {
+    "node": ">= 0.6.x"
+  },
+  "scripts": {
+    "build:parser": "jison ./src/grammar.jison -o ./src/parser.js -p lalr",
+    "start": "node ./src/repl"
+  }
 }

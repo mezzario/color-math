@@ -170,11 +170,13 @@ colorSpace:
 colorSpaceParamsList1:
     expr "," expr "," expr                     -> [$1, $3, $5]
   | expr "," expr "," expr "," expr            -> [$1, $3, $5, $7]
+  | expr "," expr "," expr "," expr "," expr   -> [$1, $3, $5, $7, $9]
 ;
 
 colorSpaceParamsList2:
     expr3 expr3 expr3                          -> [$1, $2, $3]
   | expr3 expr3 expr3 expr3                    -> [$1, $2, $3, $4]
+  | expr3 expr3 expr3 expr3 expr3              -> [$1, $2, $3, $4, $5]
 ;
 
 colorWithStop:
