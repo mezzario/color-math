@@ -53,6 +53,7 @@ export interface EvaluateOptions {
 }
 
 export interface EvaluateResult {
+    evalOptions: EvaluateOptions;
     expr: string;
     program: ParserScope.Program;
     result;
@@ -83,6 +84,7 @@ export function evaluate(expr: string, options?: EvaluateOptions) {
     }
 
     return <EvaluateResult>{
+        evalOptions: options,
         expr: expr,
         program: program,
         result: error != null ? null : value,

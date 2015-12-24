@@ -239,7 +239,7 @@ export class LessEvaluator extends Evaluator {
             else if (!node.operator)
                 res = this.funcOp(node.obj, node.value, "fade", true);
             else
-                throwError(`assignment operator '${node.operator}'= for alpha channel is not supported by LESS`, node.$loc);
+                throwError(`assignment operator '${node.operator}=' for alpha channel is not supported by LESS`, node.$loc);
         }
 
         return res;

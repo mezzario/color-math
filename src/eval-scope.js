@@ -312,14 +312,14 @@ var Evaluator = (function () {
                 re: /^(hsi\.)?(intensity|int|i)$/i,
                 manage: function (node) { return _this.evalManageColorCompHsiI(node); }
             }, {
-                re: /^((lch|hcl)\.)?(chroma|chr|ch)$/i,
-                manage: function (node) { return _this.evalManageColorCompLchC(node); }
-            }, {
                 re: /^lab\.a$/i,
                 manage: function (node) { return _this.evalManageColorCompLabA(node); }
             }, {
                 re: /^lab\.b$/i,
                 manage: function (node) { return _this.evalManageColorCompLabB(node); }
+            }, {
+                re: /^((((lch|hcl)\.)?(chroma|chr|ch))|lch\.c|hcl\.c)$/i,
+                manage: function (node) { return _this.evalManageColorCompLchC(node); }
             }
         ];
     };
@@ -417,10 +417,8 @@ var CoreEvaluator = (function (_super) {
         return value;
     };
     CoreEvaluator.prototype.evalColorByNumber = function (node) {
-        var n = utils_1.forceNumInRange(node.value.evaluate(this), 0, 0xffffffff, node.value.$loc);
-        var value = chroma(n & 0xffffff);
-        if (n > 0xffffff)
-            value.alpha((n & 0xff) / 0xff);
+        var n = utils_1.forceNumInRange(node.value.evaluate(this), 0, 0xffffff, node.value.$loc);
+        var value = chroma(n);
         return value;
     };
     CoreEvaluator.prototype.evalColorByTemperature = function (node) {
@@ -493,6 +491,7 @@ var CoreEvaluator = (function (_super) {
     };
     CoreEvaluator.prototype.evalUnaryMinus = function (node) {
         var value = utils_1.forceType(node.value.evaluate(this), utils_1.ValueType.Number, node.value.$loc);
+        value = -value;
         return value;
     };
     CoreEvaluator.prototype.evalColorInverse = function (node) {
@@ -561,7 +560,8 @@ var CoreEvaluator = (function (_super) {
     CoreEvaluator.prototype.evalExclusionBlend = function (node) { return this.blendColorsOp(node, utils_1.BlendMode.Exclusion); };
     CoreEvaluator.prototype.evalNegateBlend = function (node) { return this.blendColorsOp(node, utils_1.BlendMode.Negate); };
     CoreEvaluator.prototype.evalManageColorNumber = function (node) {
-        var curValue = Number("0x" + (node.obj.evaluate(this)).hex().replace(/^#/, ""));
+        var curObj = node.obj.evaluate(this);
+        var curValue = Number("0x" + curObj.hex().replace(/^#/, ""));
         if (node.value === void 0)
             return curValue;
         else {
@@ -569,6 +569,7 @@ var CoreEvaluator = (function (_super) {
             if (node.operator)
                 value = Math.max(Math.min(this.getNumberArithmeticFunc(node.operator)(curValue, value), 0xffffff), 0);
             var obj = chroma(value);
+            obj.alpha(curObj.alpha());
             return obj;
         }
     };

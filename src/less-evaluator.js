@@ -202,7 +202,7 @@ var LessEvaluator = (function (_super) {
             else if (!node.operator)
                 res = this.funcOp(node.obj, node.value, "fade", true);
             else
-                utils_1.throwError("assignment operator '" + node.operator + "'= for alpha channel is not supported by LESS", node.$loc);
+                utils_1.throwError("assignment operator '" + node.operator + "=' for alpha channel is not supported by LESS", node.$loc);
         }
         return res;
     };

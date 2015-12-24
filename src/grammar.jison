@@ -45,11 +45,11 @@
 "cmy""a"?\b                                    return "CSPACE_CMY";
 "cmyk""a"?\b                                   return "CSPACE_CMYK";
 "hsl""a"?\b                                    return "CSPACE_HSL";
-"hsv""a"?\b                                    return "CSPACE_HSV";
+"hs"("v"|"b")"a"?\b                            return "CSPACE_HSV";
 "hsi""a"?\b                                    return "CSPACE_HSI";
-"lab""a"?\b                                    return "CSPACE_LAB";
-"lch""a"?\b                                    return "CSPACE_LCH";
-"hcl""a"?\b                                    return "CSPACE_HCL";
+"lab""a"?\b                                    return "CSPACE_CIELAB";
+"lch""a"?\b                                    return "CSPACE_CIELCH";
+"hcl""a"?\b                                    return "CSPACE_CIEHCL";
 
 "scale"\b                                      return "SCALE";
 "bezier"\b                                     return "SCALE_BEZIER";
@@ -114,7 +114,7 @@
 %left                                          "PARAM"
 %nonassoc                                      "COLOR_NUMBER" "COLOR_TEMPERATURE"
                                                "CSPACE_RGB" "CSPACE_ARGB" "CSPACE_CMY" "CSPACE_CMYK" "CSPACE_HSL"
-                                               "CSPACE_HSV" "CSPACE_HSI" "CSPACE_LAB" "CSPACE_LCH" "CSPACE_HCL"
+                                               "CSPACE_HSV" "CSPACE_HSI" "CSPACE_CIELAB" "CSPACE_CIELCH" "CSPACE_CIEHCL"
                                                "->"
 %nonassoc                                      "CORRECT_LIGHTNESS"
 
@@ -156,9 +156,9 @@ colorSpace2:
   | CSPACE_HSL                                 -> "hsl"
   | CSPACE_HSV                                 -> "hsv"
   | CSPACE_HSI                                 -> "hsi"
-  | CSPACE_LAB                                 -> "lab"
-  | CSPACE_LCH                                 -> "lch"
-  | CSPACE_HCL                                 -> "hcl"
+  | CSPACE_CIELAB                              -> "lab"
+  | CSPACE_CIELCH                              -> "lch"
+  | CSPACE_CIEHCL                              -> "hcl"
 ;
 
 colorSpace:

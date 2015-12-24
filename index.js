@@ -67,6 +67,7 @@ function evaluate(expr, options) {
         error = e;
     }
     return {
+        evalOptions: options,
         expr: expr,
         program: program,
         result: error != null ? null : value,

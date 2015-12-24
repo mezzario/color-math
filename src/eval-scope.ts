@@ -492,14 +492,14 @@ export abstract class Evaluator {
                 re: /^(hsi\.)?(intensity|int|i)$/i,
                 manage: node => this.evalManageColorCompHsiI(node)
             }, {
-                re: /^((lch|hcl)\.)?(chroma|chr|ch)$/i,
-                manage: node => this.evalManageColorCompLchC(node)
-            }, {
                 re: /^lab\.a$/i,
                 manage: node => this.evalManageColorCompLabA(node)
             }, {
                 re: /^lab\.b$/i,
                 manage: node => this.evalManageColorCompLabB(node)
+            }, {
+                re: /^((((lch|hcl)\.)?(chroma|chr|ch))|lch\.c|hcl\.c)$/i,
+                manage: node => this.evalManageColorCompLchC(node)
             }
         ];
     }
@@ -608,12 +608,8 @@ export class CoreEvaluator extends Evaluator {
     }
 
     evalColorByNumber(node: ParserScope.ColorByNumberExpr) {
-        let n = forceNumInRange(node.value.evaluate(this), 0, 0xffffffff, node.value.$loc);
-        let value = chroma(n & 0xffffff);
-
-        if (n > 0xffffff)
-            value.alpha((n & 0xff) / 0xff);
-
+        let n = forceNumInRange(node.value.evaluate(this), 0, 0xffffff, node.value.$loc);
+        let value = chroma(n);
         return value;
     }
 
@@ -706,6 +702,7 @@ export class CoreEvaluator extends Evaluator {
 
     evalUnaryMinus(node: ParserScope.UnaryExpr) {
         let value = <number>forceType(node.value.evaluate(this), ValueType.Number, node.value.$loc);
+        value = -value;
         return value;
     }
 
@@ -785,7 +782,8 @@ export class CoreEvaluator extends Evaluator {
     evalNegateBlend(node: ParserScope.BinaryExpr)     { return this.blendColorsOp(node, BlendMode.Negate); }
 
     evalManageColorNumber(node: ParserScope.ParamExpr) {
-        let curValue = Number(`0x${(node.obj.evaluate(this)).hex().replace(/^#/, "")}`);
+        let curObj = <Chroma.Color>node.obj.evaluate(this);
+        let curValue = Number(`0x${curObj.hex().replace(/^#/, "")}`);
 
         if (node.value === void 0) // get
             return <any>curValue;
@@ -795,6 +793,8 @@ export class CoreEvaluator extends Evaluator {
                 value = Math.max(Math.min(this.getNumberArithmeticFunc(node.operator)(curValue, value), 0xffffff), 0);
 
             let obj = chroma(value);
+            obj.alpha(curObj.alpha());
+
             return obj;
         }
     }
