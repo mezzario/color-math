@@ -48,11 +48,6 @@ export class ColorScale {
 
     getFn() {
         let colors = this.getParamValue(this.scaleParams, "colors");
-
-        let bezierColorsMax = 5;
-        if (this.name === "bezier" && colors.length > bezierColorsMax)
-            throw `bezier interpolate only supports up to ${bezierColorsMax} colors, you provided: ${colors.length}`;
-
         let ctor = chroma[this.name];
         let fn = colors ? ctor(colors) : ctor();
 
@@ -668,7 +663,11 @@ export class CoreEvaluator extends Evaluator {
     }
 
     evalScale(node: ParserScope.ScaleExpr) {
-        let scaleParams = [{ name: "colors", value: forceType(node.colors.evaluate(this), ValueType.ColorArray, node.colors.$loc) }];
+        let colors = forceType(node.colors.evaluate(this), ValueType.ColorArray, node.colors.$loc);
+        if (colors && colors.length < 2)
+            throwError("two or more colors are required for interpolation");
+
+        let scaleParams = [{ name: "colors", value: colors }];
 
         if (node.domain !== void 0)
             scaleParams.push({ name: "domain", value: forceType(node.domain.evaluate(this), ValueType.NumberArray, node.domain.$loc) });
@@ -682,7 +681,12 @@ export class CoreEvaluator extends Evaluator {
     }
 
     evalBezier(node: ParserScope.BezierExpr) {
-        let scaleParams = [{ name: "colors", value: forceType(node.colors.evaluate(this), ValueType.ColorArray, node.colors.$loc) }];
+        let colors = forceType(node.colors.evaluate(this), ValueType.ColorArray, node.colors.$loc);
+        let colorsMax = 5;
+        if (colors.length > colorsMax)
+            throwError(`bezier interpolate only supports up to ${colorsMax} colors, you provided: ${colors.length}`);
+
+        let scaleParams = [{ name: "colors", value: colors }];
         let value = new ColorScale("bezier", void 0, scaleParams);
         return value;
     }
@@ -755,7 +759,7 @@ export class CoreEvaluator extends Evaluator {
 
     evalColorsFromScaleProduction(node: ParserScope.BinaryExpr) {
         let left = <ColorScale>node.left.evaluate(this);
-        let right = <number>node.right.evaluate(this);
+        let right = forceNumInRange(node.right.evaluate(this), 2, 0xffff, node.right.$loc);
         let value = _.map(<string[]>left.getFn().colors(right), s => chroma(s));
         return value;
     }

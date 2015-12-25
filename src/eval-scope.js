@@ -35,9 +35,6 @@ var ColorScale = (function () {
     };
     ColorScale.prototype.getFn = function () {
         var colors = this.getParamValue(this.scaleParams, "colors");
-        var bezierColorsMax = 5;
-        if (this.name === "bezier" && colors.length > bezierColorsMax)
-            throw "bezier interpolate only supports up to " + bezierColorsMax + " colors, you provided: " + colors.length;
         var ctor = chroma[this.name];
         var fn = colors ? ctor(colors) : ctor();
         this.applyParams(fn, this.params);
@@ -466,7 +463,10 @@ var CoreEvaluator = (function (_super) {
         return value;
     };
     CoreEvaluator.prototype.evalScale = function (node) {
-        var scaleParams = [{ name: "colors", value: utils_1.forceType(node.colors.evaluate(this), utils_1.ValueType.ColorArray, node.colors.$loc) }];
+        var colors = utils_1.forceType(node.colors.evaluate(this), utils_1.ValueType.ColorArray, node.colors.$loc);
+        if (colors && colors.length < 2)
+            utils_1.throwError("two or more colors are required for interpolation");
+        var scaleParams = [{ name: "colors", value: colors }];
         if (node.domain !== void 0)
             scaleParams.push({ name: "domain", value: utils_1.forceType(node.domain.evaluate(this), utils_1.ValueType.NumberArray, node.domain.$loc) });
         if (node.mode !== void 0)
@@ -475,7 +475,11 @@ var CoreEvaluator = (function (_super) {
         return value;
     };
     CoreEvaluator.prototype.evalBezier = function (node) {
-        var scaleParams = [{ name: "colors", value: utils_1.forceType(node.colors.evaluate(this), utils_1.ValueType.ColorArray, node.colors.$loc) }];
+        var colors = utils_1.forceType(node.colors.evaluate(this), utils_1.ValueType.ColorArray, node.colors.$loc);
+        var colorsMax = 5;
+        if (colors.length > colorsMax)
+            utils_1.throwError("bezier interpolate only supports up to " + colorsMax + " colors, you provided: " + colors.length);
+        var scaleParams = [{ name: "colors", value: colors }];
         var value = new ColorScale("bezier", void 0, scaleParams);
         return value;
     };
@@ -536,7 +540,7 @@ var CoreEvaluator = (function (_super) {
     };
     CoreEvaluator.prototype.evalColorsFromScaleProduction = function (node) {
         var left = node.left.evaluate(this);
-        var right = node.right.evaluate(this);
+        var right = utils_1.forceNumInRange(node.right.evaluate(this), 2, 0xffff, node.right.$loc);
         var value = _.map(left.getFn().colors(right), function (s) { return chroma(s); });
         return value;
     };
