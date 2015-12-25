@@ -1,4 +1,0 @@
-# color-math
-
-Description.
-
