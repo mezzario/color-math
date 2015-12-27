@@ -1,4 +1,4 @@
-﻿import * as _ from "lodash";
+﻿var _ = require("lodash") as _.LoDashStatic;
 import * as ParserScope from "./src/parser-scope";
 import { ColorScale, Evaluator, CoreEvaluator } from "./src/eval-scope";
 import { LessEvaluator } from "./src/less-evaluator";

@@ -1,6 +1,6 @@
 ﻿/// <reference path="../typings/tsd.d.ts" />
 
-import * as _ from "lodash";
+var _ = require("lodash") as _.LoDashStatic;
 import * as chroma from "chroma-js";
 import { ColorScale } from "./eval-scope";
 
@@ -173,8 +173,8 @@ export function getColorSpaceParamsValidRanges(space: string) {
         case "hsv":  return [[0, 360], [   0,   1], [   0,   1]        ];
         case "hsi":  return [[0, 360], [   0,   1], [   0,   1]        ];
         case "lab":  return [[0, 100], [-128, 127], [-128, 127]        ];
-        case "lch":  return [[0, 100], [   0, 100], [   0, 360]        ];
-        case "hcl":  return [[0, 360], [   0, 100], [   0, 100]        ];
+        case "lch":  return [[0, 100], [   0, 140], [   0, 360]        ];
+        case "hcl":  return [[0, 360], [   0, 140], [   0, 100]        ];
 
         default:
             throw new SyntaxError(`unknown namespace: ${space.toUpperCase()}.`);
@@ -238,7 +238,7 @@ export function colorFromWavelength(wl: number) {
         g = 0;
         b = 0;
     }
- 
+
     if (wl > 780 || wl < 380)
         a = 0;
     else if (wl > 700)

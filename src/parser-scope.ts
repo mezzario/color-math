@@ -1,6 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 
-import * as _ from "lodash";
+var _ = require("lodash") as _.LoDashStatic;
 import { throwError, isColor, formatColor } from "./utils";
 import { ColorScale, Evaluator } from "./eval-scope";
 

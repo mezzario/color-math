@@ -476,9 +476,10 @@ var CoreEvaluator = (function (_super) {
     };
     CoreEvaluator.prototype.evalBezier = function (node) {
         var colors = utils_1.forceType(node.colors.evaluate(this), utils_1.ValueType.ColorArray, node.colors.$loc);
+        var colorsMin = 2;
         var colorsMax = 5;
-        if (colors.length > colorsMax)
-            utils_1.throwError("bezier interpolate only supports up to " + colorsMax + " colors, you provided: " + colors.length);
+        if (colors.length < colorsMin || colors.length > colorsMax)
+            utils_1.throwError("bezier interpolate supports from " + colorsMin + " to " + colorsMax + " colors, you provided: " + colors.length);
         var scaleParams = [{ name: "colors", value: colors }];
         var value = new ColorScale("bezier", void 0, scaleParams);
         return value;

@@ -1,6 +1,6 @@
 ﻿/// <reference path="../typings/tsd.d.ts" />
 
-import * as _ from "lodash";
+var _ = require("lodash") as _.LoDashStatic;
 import * as ReadLine from "readline";
 import * as CliColor from "cli-color";
 import * as ColorMath from "../index";

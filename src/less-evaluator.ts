@@ -1,6 +1,6 @@
 ﻿/// <reference path="../typings/tsd.d.ts" />
 
-import * as _ from "lodash";
+var _ = require("lodash") as _.LoDashStatic;
 import * as ParserScope from "./parser-scope";
 import { Evaluator } from "./eval-scope";
 import { BlendMode, throwError } from "./utils";

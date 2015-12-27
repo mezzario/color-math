@@ -30,6 +30,7 @@
     <Content Include="README.md" />
     <Content Include="src\repl.js.map" />
     <Content Include="tsconfig.json" />
+    <Content Include="tsd.json" />
     <TypeScriptCompile Include="index.ts" />
     <TypeScriptCompile Include="src\utils.ts" />
     <TypeScriptCompile Include="src\eval-scope.ts" />

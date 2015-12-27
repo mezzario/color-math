@@ -1,6 +1,6 @@
 ﻿/// <reference path="../typings/tsd.d.ts" />
 
-import * as _ from "lodash";
+var _ = require("lodash") as _.LoDashStatic;
 import * as chroma from "chroma-js";
 import * as ParserScope from "./parser-scope";
 
@@ -682,9 +682,10 @@ export class CoreEvaluator extends Evaluator {
 
     evalBezier(node: ParserScope.BezierExpr) {
         let colors = forceType(node.colors.evaluate(this), ValueType.ColorArray, node.colors.$loc);
+        let colorsMin = 2;
         let colorsMax = 5;
-        if (colors.length > colorsMax)
-            throwError(`bezier interpolate only supports up to ${colorsMax} colors, you provided: ${colors.length}`);
+        if (colors.length < colorsMin || colors.length > colorsMax)
+            throwError(`bezier interpolate supports from ${colorsMin} to ${colorsMax} colors, you provided: ${colors.length}`);
 
         let scaleParams = [{ name: "colors", value: colors }];
         let value = new ColorScale("bezier", void 0, scaleParams);
