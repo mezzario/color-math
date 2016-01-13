@@ -277,6 +277,7 @@ declare module Chroma {
 
         rgb(): number[];
         rgba(): number[];
+        cmyk(): number[];
         hsl(): number[];
         hsv(): number[];
         lab(): number[];
