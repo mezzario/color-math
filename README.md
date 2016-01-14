@@ -22,10 +22,12 @@ result = ColorMath.evaluate("(#222 + #444) / 2")
 
 ### A read–eval–print loop (REPL)
 
-`npm i`
-`npm start`
+```
+npm i
+npm start
+```
 
-Interpreter will start: type your expressions.
+Interpreter will start. Now you can type your expressions.
 
 ### Demo and documentation
 
