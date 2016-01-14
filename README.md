@@ -1,17 +1,32 @@
 # color-math
+ColorMath is an interpreter which is very similar to ordinary calculator, but instead of numbers it mainly operates with colors.
 
-Development is in progress.
+### Install
+`npm i color-math -S`
 
-Quick info:
+### Usage example
+```javascript
+var ColorMath = require("color-math");
 
-* `npm i`
-* `npm start`
+var result = ColorMath.evaluate("red | green");
+// will return color which is result of mixing red and green colors
 
-Interpreter will start. Type expressions like:
+result = ColorMath.evaluate("red @a 30%")
+// set color's alpha channel to 30%
 
-* `red | green` - mix colors
-* `red @a 30%` - set color's alpha channel
-* `(#222 + #444) / 2` - arithmetic operations with colors and numbers
-* `...`
+result = ColorMath.evaluate("(#222 + #444) / 2")
+// arithmetic operations with colors and numbers
+```
 
-Description and README with full list of operations will be updated soon.
+[chroma.js](https://github.com/gka/chroma.js/) color library is used internally to manipulate colors and wrap results.
+
+### A read–eval–print loop (REPL)
+
+`npm i`
+`npm start`
+
+Interpreter will start: type your expressions.
+
+### Demo and documentation
+
+Please go to [http://colormath.net/](http://colormath.net/) to test your expressions, visualize results and read about all available features with examples.
