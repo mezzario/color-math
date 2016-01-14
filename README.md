@@ -1,5 +1,5 @@
 # color-math
-ColorMath is an interpreter which is very similar to ordinary calculator, but instead of numbers it mainly operates with colors.
+ColorMath is a parser which is very similar to ordinary calculator, but instead of numbers it mainly operates with colors.
 
 ### Install
 `npm i color-math -S`
