@@ -11,10 +11,10 @@ var ColorMath = require("color-math");
 var result = ColorMath.evaluate("red | green");
 // will return color which is result of mixing red and green colors
 
-result = ColorMath.evaluate("red @a 30%")
+result = ColorMath.evaluate("red @a 30%");
 // set color's alpha channel to 30%
 
-result = ColorMath.evaluate("(#222 + #444) / 2")
+result = ColorMath.evaluate("(#222 + #444) / 2");
 // arithmetic operations with colors and numbers
 ```
 
