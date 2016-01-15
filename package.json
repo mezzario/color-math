@@ -1,12 +1,16 @@
 {
   "name": "color-math",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "expressions to manipulate colors",
   "keywords": [
     "color",
+    "colors",
     "math",
     "expressions",
-    "manipulate"
+    "manipulate",
+    "calculate",
+    "evaluate",
+    "interpreter"
   ],
   "author": {
     "name": "Eugene Baranchuk",

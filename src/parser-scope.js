@@ -1,4 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -17,7 +18,7 @@ var LocPos = (function () {
         return this.ln + ":" + this.col + "," + this.i;
     };
     return LocPos;
-})();
+}());
 exports.LocPos = LocPos;
 var Loc = (function () {
     function Loc(loc) {
@@ -28,7 +29,7 @@ var Loc = (function () {
         return this.start + ".." + this.end;
     };
     return Loc;
-})();
+}());
 exports.Loc = Loc;
 var Node = (function () {
     function Node($type, $loc) {
@@ -67,7 +68,7 @@ var Node = (function () {
         return this.$eval;
     };
     return Node;
-})();
+}());
 exports.Node = Node;
 var Program = (function (_super) {
     __extends(Program, _super);
@@ -85,7 +86,7 @@ var Program = (function (_super) {
         return e.evalProgram(this);
     };
     return Program;
-})(Node);
+}(Node));
 exports.Program = Program;
 var Statement = (function (_super) {
     __extends(Statement, _super);
@@ -103,7 +104,7 @@ var Statement = (function (_super) {
         return e.evalStatement(this);
     };
     return Statement;
-})(Node);
+}(Node));
 exports.Statement = Statement;
 var Expr = (function (_super) {
     __extends(Expr, _super);
@@ -111,7 +112,7 @@ var Expr = (function (_super) {
         _super.call(this, "expr." + $type, $loc);
     }
     return Expr;
-})(Node);
+}(Node));
 exports.Expr = Expr;
 var ParenthesesExpr = (function (_super) {
     __extends(ParenthesesExpr, _super);
@@ -123,7 +124,7 @@ var ParenthesesExpr = (function (_super) {
         return e.evalParentheses(this);
     };
     return ParenthesesExpr;
-})(Expr);
+}(Expr));
 exports.ParenthesesExpr = ParenthesesExpr;
 var NumberLiteralExpr = (function (_super) {
     __extends(NumberLiteralExpr, _super);
@@ -135,7 +136,7 @@ var NumberLiteralExpr = (function (_super) {
         return e.evalNumberLiteral(this);
     };
     return NumberLiteralExpr;
-})(Expr);
+}(Expr));
 exports.NumberLiteralExpr = NumberLiteralExpr;
 var PercentExpr = (function (_super) {
     __extends(PercentExpr, _super);
@@ -147,7 +148,7 @@ var PercentExpr = (function (_super) {
         return e.evalPercent(this);
     };
     return PercentExpr;
-})(Expr);
+}(Expr));
 exports.PercentExpr = PercentExpr;
 var ArrayLiteralExpr = (function (_super) {
     __extends(ArrayLiteralExpr, _super);
@@ -159,21 +160,8 @@ var ArrayLiteralExpr = (function (_super) {
         return e.evalArrayLiteral(this);
     };
     return ArrayLiteralExpr;
-})(Expr);
+}(Expr));
 exports.ArrayLiteralExpr = ArrayLiteralExpr;
-var ArrayElementExpr = (function (_super) {
-    __extends(ArrayElementExpr, _super);
-    function ArrayElementExpr(array, index, $loc) {
-        _super.call(this, "arrayElement", $loc);
-        this.array = array;
-        this.index = index;
-    }
-    ArrayElementExpr.prototype.evaluateInternal = function (e) {
-        return e.evalArrayElement(this);
-    };
-    return ArrayElementExpr;
-})(Expr);
-exports.ArrayElementExpr = ArrayElementExpr;
 var ColorNameLiteralExpr = (function (_super) {
     __extends(ColorNameLiteralExpr, _super);
     function ColorNameLiteralExpr(value, $loc) {
@@ -184,7 +172,7 @@ var ColorNameLiteralExpr = (function (_super) {
         return e.evalColorNameLiteral(this);
     };
     return ColorNameLiteralExpr;
-})(Expr);
+}(Expr));
 exports.ColorNameLiteralExpr = ColorNameLiteralExpr;
 var ColorHexLiteralExpr = (function (_super) {
     __extends(ColorHexLiteralExpr, _super);
@@ -196,7 +184,7 @@ var ColorHexLiteralExpr = (function (_super) {
         return e.evalColorHexLiteral(this);
     };
     return ColorHexLiteralExpr;
-})(Expr);
+}(Expr));
 exports.ColorHexLiteralExpr = ColorHexLiteralExpr;
 var ColorByNumberExpr = (function (_super) {
     __extends(ColorByNumberExpr, _super);
@@ -208,7 +196,7 @@ var ColorByNumberExpr = (function (_super) {
         return e.evalColorByNumber(this);
     };
     return ColorByNumberExpr;
-})(Expr);
+}(Expr));
 exports.ColorByNumberExpr = ColorByNumberExpr;
 var ColorByTemperatureExpr = (function (_super) {
     __extends(ColorByTemperatureExpr, _super);
@@ -220,7 +208,7 @@ var ColorByTemperatureExpr = (function (_super) {
         return e.evalColorByTemperature(this);
     };
     return ColorByTemperatureExpr;
-})(Expr);
+}(Expr));
 exports.ColorByTemperatureExpr = ColorByTemperatureExpr;
 var ColorByWavelengthExpr = (function (_super) {
     __extends(ColorByWavelengthExpr, _super);
@@ -232,7 +220,7 @@ var ColorByWavelengthExpr = (function (_super) {
         return e.evalColorByWavelength(this);
     };
     return ColorByWavelengthExpr;
-})(Expr);
+}(Expr));
 exports.ColorByWavelengthExpr = ColorByWavelengthExpr;
 var ColorBySpaceParams = (function (_super) {
     __extends(ColorBySpaceParams, _super);
@@ -245,7 +233,7 @@ var ColorBySpaceParams = (function (_super) {
         return e.evalColorBySpaceParams(this);
     };
     return ColorBySpaceParams;
-})(Expr);
+}(Expr));
 exports.ColorBySpaceParams = ColorBySpaceParams;
 var RandomColorExpr = (function (_super) {
     __extends(RandomColorExpr, _super);
@@ -256,7 +244,7 @@ var RandomColorExpr = (function (_super) {
         return e.evalRandomColor(this);
     };
     return RandomColorExpr;
-})(Expr);
+}(Expr));
 exports.RandomColorExpr = RandomColorExpr;
 var ScaleExpr = (function (_super) {
     __extends(ScaleExpr, _super);
@@ -270,7 +258,7 @@ var ScaleExpr = (function (_super) {
         return e.evalScale(this);
     };
     return ScaleExpr;
-})(Expr);
+}(Expr));
 exports.ScaleExpr = ScaleExpr;
 var BezierExpr = (function (_super) {
     __extends(BezierExpr, _super);
@@ -282,7 +270,7 @@ var BezierExpr = (function (_super) {
         return e.evalBezier(this);
     };
     return BezierExpr;
-})(Expr);
+}(Expr));
 exports.BezierExpr = BezierExpr;
 var CubehelixExpr = (function (_super) {
     __extends(CubehelixExpr, _super);
@@ -293,7 +281,7 @@ var CubehelixExpr = (function (_super) {
         return e.evalCubehelix(this);
     };
     return CubehelixExpr;
-})(Expr);
+}(Expr));
 exports.CubehelixExpr = CubehelixExpr;
 var BrewerConstExpr = (function (_super) {
     __extends(BrewerConstExpr, _super);
@@ -305,7 +293,7 @@ var BrewerConstExpr = (function (_super) {
         return e.evalBrewerConst(this);
     };
     return BrewerConstExpr;
-})(Expr);
+}(Expr));
 exports.BrewerConstExpr = BrewerConstExpr;
 var ParamExpr = (function (_super) {
     __extends(ParamExpr, _super);
@@ -320,7 +308,7 @@ var ParamExpr = (function (_super) {
         return e.evalParam(this);
     };
     return ParamExpr;
-})(Expr);
+}(Expr));
 exports.ParamExpr = ParamExpr;
 var GetParamExpr = (function (_super) {
     __extends(GetParamExpr, _super);
@@ -328,7 +316,7 @@ var GetParamExpr = (function (_super) {
         _super.call(this, "getParam", obj, name, void 0, void 0, $loc);
     }
     return GetParamExpr;
-})(ParamExpr);
+}(ParamExpr));
 exports.GetParamExpr = GetParamExpr;
 var SetParamExpr = (function (_super) {
     __extends(SetParamExpr, _super);
@@ -336,7 +324,7 @@ var SetParamExpr = (function (_super) {
         _super.call(this, "setParam", obj, name, value, operator, $loc);
     }
     return SetParamExpr;
-})(ParamExpr);
+}(ParamExpr));
 exports.SetParamExpr = SetParamExpr;
 var OperationExpr = (function (_super) {
     __extends(OperationExpr, _super);
@@ -346,7 +334,7 @@ var OperationExpr = (function (_super) {
         this.options = options;
     }
     return OperationExpr;
-})(Expr);
+}(Expr));
 exports.OperationExpr = OperationExpr;
 var UnaryExpr = (function (_super) {
     __extends(UnaryExpr, _super);
@@ -360,7 +348,7 @@ var UnaryExpr = (function (_super) {
         return e.evalUnaryOperation(this);
     };
     return UnaryExpr;
-})(OperationExpr);
+}(OperationExpr));
 exports.UnaryExpr = UnaryExpr;
 var BinaryExpr = (function (_super) {
     __extends(BinaryExpr, _super);
@@ -375,7 +363,7 @@ var BinaryExpr = (function (_super) {
         return e.evalBinaryOperation(this);
     };
     return BinaryExpr;
-})(OperationExpr);
+}(OperationExpr));
 exports.BinaryExpr = BinaryExpr;
 var GetVarExpr = (function (_super) {
     __extends(GetVarExpr, _super);
@@ -387,7 +375,7 @@ var GetVarExpr = (function (_super) {
         return e.evalGetVar(this);
     };
     return GetVarExpr;
-})(Expr);
+}(Expr));
 exports.GetVarExpr = GetVarExpr;
 var SetVarExpr = (function (_super) {
     __extends(SetVarExpr, _super);
@@ -400,6 +388,6 @@ var SetVarExpr = (function (_super) {
         return e.evalSetVar(this);
     };
     return SetVarExpr;
-})(Expr);
+}(Expr));
 exports.SetVarExpr = SetVarExpr;
 //# sourceMappingURL=parser-scope.js.map

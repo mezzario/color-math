@@ -94,7 +94,7 @@ export abstract class Evaluator {
 
     abstract evalArrayLiteral(node: ParserScope.ArrayLiteralExpr);
 
-    abstract evalArrayElement(node: ParserScope.ArrayElementExpr);
+    abstract evalArrayElement(node: ParserScope.ParamExpr);
 
     abstract evalColorNameLiteral(node: ParserScope.ColorNameLiteralExpr);
     abstract evalColorHexLiteral(node: ParserScope.ColorHexLiteralExpr);
@@ -113,12 +113,18 @@ export abstract class Evaluator {
     evalParam(node: ParserScope.ParamExpr) {
         let obj = node.obj.evaluate(this.getCore());
         let objType = getType(obj);
-        let defs = [];
+        let defs: IParamDef[] = [];
 
         switch (objType) {
             case ValueType.Color:      defs = this.getColorParamDefs(); break;
-            case ValueType.ColorScale: defs = this.getColorScaleParamDefs((<ColorScale>obj).name); break;
+            case ValueType.ColorScale: defs = this.getColorScaleParamDefs((obj as ColorScale).name); break;
         }
+
+        if (!defs.length && (objType & ValueType.Array))
+            defs.push({
+                re: /^\d+$/i,
+                get: node => this.evalArrayElement(node)
+            });
 
         let result = this.manageParam(node, defs);
         return result;
@@ -531,6 +537,13 @@ export abstract class Evaluator {
 
         return defs;
     }
+
+    protected unwrapParens(node: ParserScope.Expr) {
+        while (node instanceof ParserScope.ParenthesesExpr)
+            node = (node as ParserScope.ParenthesesExpr).expr;
+
+        return node;
+    }
 }
 
 enum VarOp {
@@ -585,9 +598,9 @@ export class CoreEvaluator extends Evaluator {
         return value;
     }
 
-    evalArrayElement(node: ParserScope.ArrayElementExpr) {
-        let array = node.array.evaluate(this);
-        let index = forceNumInRange(node.index.evaluate(this), 0, array.length - 1, node.index.$loc);
+    evalArrayElement(node: ParserScope.ParamExpr) {
+        let array = forceType(node.obj.evaluate(this), ValueType.Array, node.obj.$loc);
+        let index = forceNumInRange(+node.name, 0, array.length - 1, node.$loc);
         let value = array[index];
         return value;
     }
@@ -663,14 +676,22 @@ export class CoreEvaluator extends Evaluator {
     }
 
     evalScale(node: ParserScope.ScaleExpr) {
-        let colors = forceType(node.colors.evaluate(this), ValueType.ColorArray, node.colors.$loc);
+        let colors = _.isArray(node.colors)
+            ? _.map(node.colors as ParserScope.Expr[], expr => forceType(expr.evaluate(this), ValueType.Color, expr.$loc))
+            : forceType((node.colors as ParserScope.Expr).evaluate(this), ValueType.ColorArray, (node.colors as ParserScope.Expr).$loc);
+
         if (colors && colors.length < 2)
             throwError("two or more colors are required for interpolation");
 
         let scaleParams = [{ name: "colors", value: colors }];
 
-        if (node.domain !== void 0)
-            scaleParams.push({ name: "domain", value: forceType(node.domain.evaluate(this), ValueType.NumberArray, node.domain.$loc) });
+        if (node.domain !== void 0) {
+            let domain = _.map(
+                node.domain as ParserScope.Expr[],
+                expr => forceType(expr.evaluate(this), ValueType.Number, expr.$loc));
+
+            scaleParams.push({ name: "domain", value: domain });
+        }
 
         if (node.mode !== void 0)
             scaleParams.push({ name: "mode", value: node.mode });

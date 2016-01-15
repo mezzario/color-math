@@ -5,7 +5,7 @@
         "jsx": "react",
         "removeComments": false,
         "sourceMap": true,
-        "inlineSourceMap": true
+        "inlineSourceMap": false
     },
     "exclude": [
         ".vs",

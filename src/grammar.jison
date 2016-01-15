@@ -142,12 +142,12 @@ number:
 ;
 
 exprList:
-    expr                                       -> [$1]
-  | exprList "," expr                          -> $1.concat($3)
+    expr2 expr2                                -> [$1, $2]
+  | exprList expr2                             -> $1.concat($2)
 ;
 
-arrayLiteral:
-    "[" exprList "]"                           -> new yy.ArrayLiteralExpr($2, @$)
+array:
+    exprList                                   -> new yy.ArrayLiteralExpr($1, @$)
 ;
 
 colorSpace2:
@@ -173,49 +173,39 @@ colorSpaceParamsList1:
   | expr "," expr "," expr "," expr "," expr   -> [$1, $3, $5, $7, $9]
 ;
 
-colorSpaceParamsList2:
-    expr3 expr3 expr3                          -> [$1, $2, $3]
-  | expr3 expr3 expr3 expr3                    -> [$1, $2, $3, $4]
-  | expr3 expr3 expr3 expr3 expr3              -> [$1, $2, $3, $4, $5]
-;
-
 colorWithStop:
-    expr3 ":" expr3                            -> [$1, $3]
+    expr2 ":" expr2                            -> [$1, $3]
 ;
 
 colorsWithStopsList:
     colorWithStop                              -> [[$1[0]], [$1[1]]]
-  | colorsWithStopsList "," colorWithStop      -> [$1[0].concat($3[0]), $1[1].concat($3[1])]
+  | colorsWithStopsList colorWithStop          -> [$1[0].concat($2[0]), $1[1].concat($2[1])]
 ;
 
 colorsWithStops:
-    "[" colorsWithStopsList "]"                -> $2
+    "(" colorsWithStopsList ")"                -> $2
 ;
 
-expr3:
+expr2:
     number
   | number "%"                                 -> new yy.PercentExpr($1, @$)
   | COLOR_NAME                                 -> new yy.ColorNameLiteralExpr($1, @$)
   | COLOR_HEX                                  -> new yy.ColorHexLiteralExpr($1, @$)
   | COLOR_RANDOM                               -> new yy.RandomColorExpr(@$)
-  | COLOR_NUMBER expr3                         -> new yy.ColorByNumberExpr($2, @$)
-  | COLOR_TEMPERATURE expr3                    -> new yy.ColorByTemperatureExpr($2, @$)
-  | COLOR_WAVELENGTH expr3                     -> new yy.ColorByWavelengthExpr($2, @$)
+  | COLOR_NUMBER expr2                         -> new yy.ColorByNumberExpr($2, @$)
+  | COLOR_TEMPERATURE expr2                    -> new yy.ColorByTemperatureExpr($2, @$)
+  | COLOR_WAVELENGTH expr2                     -> new yy.ColorByWavelengthExpr($2, @$)
   | colorSpace "(" colorSpaceParamsList1 ")"   -> new yy.ColorBySpaceParams($1, $3, @$)
-  | colorSpace "(" colorSpaceParamsList2 ")"   -> new yy.ColorBySpaceParams($1, $3, @$)
   | BREWER_CONST                               -> new yy.BrewerConstExpr($1.replace(/^.+\./, ""), @$)
   | VARIABLE                                   -> new yy.GetVarExpr($1, @$)
   | exprWParen
 ;
 
-expr2:
-    expr3
-  | arrayLiteral
-;
-
 expr:
     expr2
-  | colorSpace colorSpaceParamsList2           -> new yy.ColorBySpaceParams($1, $2, @$)
+  | array
+
+  | colorSpace array                           -> new yy.ColorBySpaceParams($1, $2.value, @$)
 
   | SCALE colorsWithStops                      -> new yy.ScaleExpr($2[0], $2[1], void 0, @$)
   | SCALE colorsWithStops colorSpace2          -> new yy.ScaleExpr($2[0], $2[1], $3, @$)
@@ -258,9 +248,8 @@ expr:
   | expr  "|"                           expr   -> new yy.BinaryExpr($1, $3, $2, void 0, @$)
   | expr  "|" "{" colorSpace2       "}" expr   -> new yy.BinaryExpr($1, $6, $2, { mode: $4 }, @$)
   | expr  "|" "{" expr              "}" expr   -> new yy.BinaryExpr($1, $6, $2, { ratio: $4 }, @$)
-  | expr  "|" "{" expr3 colorSpace2 "}" expr   -> new yy.BinaryExpr($1, $7, $2, { mode: $5, ratio: $4 }, @$)
+  | expr  "|" "{" expr2 colorSpace2 "}" expr   -> new yy.BinaryExpr($1, $7, $2, { mode: $5, ratio: $4 }, @$)
 
-  | expr2 "[" expr "]"                         -> new yy.ArrayElementExpr($1, $3, @$)
   | VARIABLE "=" expr                          -> new yy.SetVarExpr($1, $3, @$)
 ;
 

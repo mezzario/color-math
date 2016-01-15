@@ -47,17 +47,8 @@ export class LessEvaluator extends Evaluator {
         return value;
     }
 
-    evalArrayElement(node: ParserScope.ArrayElementExpr) {
-        let indexStr: string;
-
-        if (node.index instanceof ParserScope.NumberLiteralExpr) {
-            let index = this.getCore().evalNumberLiteral(<ParserScope.NumberLiteralExpr>node.index);
-            indexStr = String(index + 1);
-        }
-        else
-            indexStr = `${node.index.evaluate(this) } + 1`;
-
-        let value = `extract(${node.array.evaluate(this)}, ${indexStr})`;
+    evalArrayElement(node: ParserScope.ParamExpr) {
+        let value = `extract(${this.unwrapParens(node.obj).evaluate(this)}, ${node.name + 1})`;
         return value;
     }
 
@@ -153,8 +144,8 @@ export class LessEvaluator extends Evaluator {
 
     evalColorsMix(node: ParserScope.BinaryExpr) {
         let params = <string[]>[
-            node.left.evaluate(this),
-            node.right.evaluate(this)
+            this.unwrapParens(node.left).evaluate(this),
+            this.unwrapParens(node.right).evaluate(this)
         ];
 
         let ratioExpr = <ParserScope.Expr>(node.options || {}).ratio;
@@ -219,7 +210,7 @@ export class LessEvaluator extends Evaluator {
         let res: string = void 0;
 
         if (node.value === void 0)
-            res = `luma(${node.obj.evaluate(this)})`;
+            res = `luma(${this.unwrapParens(node.obj).evaluate(this)})`;
         else
             throwError(`setting luminance is not supported by LESS`, node.$loc);
 
@@ -230,7 +221,7 @@ export class LessEvaluator extends Evaluator {
         let res: string = void 0;
 
         if (node.value === void 0)
-            res = `alpha(${node.obj.evaluate(this)})`;
+            res = `alpha(${this.unwrapParens(node.obj).evaluate(this)})`;
         else {
             if (node.operator === "+")
                 res = this.funcOp(node.obj, node.value, "fadein", true);
@@ -321,7 +312,7 @@ export class LessEvaluator extends Evaluator {
         relative = false
     ) {
         let params = <string[]>[
-            nodeLeft.evaluate(this),
+            this.unwrapParens(nodeLeft).evaluate(this),
             rightIsPercentage ? this.toPercentage(nodeRight) : nodeRight.evaluate(this)
         ];
 

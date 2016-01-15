@@ -1,4 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -6,6 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var _ = require("lodash");
 var chroma = require("chroma-js");
+var ParserScope = require("./parser-scope");
 var utils_1 = require("./utils");
 var ColorScale = (function () {
     function ColorScale(name, params, scaleParams) {
@@ -44,7 +46,7 @@ var ColorScale = (function () {
         return fn;
     };
     return ColorScale;
-})();
+}());
 exports.ColorScale = ColorScale;
 var Evaluator = (function () {
     function Evaluator($type) {
@@ -56,6 +58,7 @@ var Evaluator = (function () {
             || (this._core = new CoreEvaluator());
     };
     Evaluator.prototype.evalParam = function (node) {
+        var _this = this;
         var obj = node.obj.evaluate(this.getCore());
         var objType = utils_1.getType(obj);
         var defs = [];
@@ -67,6 +70,11 @@ var Evaluator = (function () {
                 defs = this.getColorScaleParamDefs(obj.name);
                 break;
         }
+        if (!defs.length && (objType & utils_1.ValueType.Array))
+            defs.push({
+                re: /^\d+$/i,
+                get: function (node) { return _this.evalArrayElement(node); }
+            });
         var result = this.manageParam(node, defs);
         return result;
     };
@@ -350,8 +358,13 @@ var Evaluator = (function () {
                 }]);
         return defs;
     };
+    Evaluator.prototype.unwrapParens = function (node) {
+        while (node instanceof ParserScope.ParenthesesExpr)
+            node = node.expr;
+        return node;
+    };
     return Evaluator;
-})();
+}());
 exports.Evaluator = Evaluator;
 var VarOp;
 (function (VarOp) {
@@ -400,8 +413,8 @@ var CoreEvaluator = (function (_super) {
         return value;
     };
     CoreEvaluator.prototype.evalArrayElement = function (node) {
-        var array = node.array.evaluate(this);
-        var index = utils_1.forceNumInRange(node.index.evaluate(this), 0, array.length - 1, node.index.$loc);
+        var array = utils_1.forceType(node.obj.evaluate(this), utils_1.ValueType.Array, node.obj.$loc);
+        var index = utils_1.forceNumInRange(+node.name, 0, array.length - 1, node.$loc);
         var value = array[index];
         return value;
     };
@@ -463,12 +476,17 @@ var CoreEvaluator = (function (_super) {
         return value;
     };
     CoreEvaluator.prototype.evalScale = function (node) {
-        var colors = utils_1.forceType(node.colors.evaluate(this), utils_1.ValueType.ColorArray, node.colors.$loc);
+        var _this = this;
+        var colors = _.isArray(node.colors)
+            ? _.map(node.colors, function (expr) { return utils_1.forceType(expr.evaluate(_this), utils_1.ValueType.Color, expr.$loc); })
+            : utils_1.forceType(node.colors.evaluate(this), utils_1.ValueType.ColorArray, node.colors.$loc);
         if (colors && colors.length < 2)
             utils_1.throwError("two or more colors are required for interpolation");
         var scaleParams = [{ name: "colors", value: colors }];
-        if (node.domain !== void 0)
-            scaleParams.push({ name: "domain", value: utils_1.forceType(node.domain.evaluate(this), utils_1.ValueType.NumberArray, node.domain.$loc) });
+        if (node.domain !== void 0) {
+            var domain = _.map(node.domain, function (expr) { return utils_1.forceType(expr.evaluate(_this), utils_1.ValueType.Number, expr.$loc); });
+            scaleParams.push({ name: "domain", value: domain });
+        }
         if (node.mode !== void 0)
             scaleParams.push({ name: "mode", value: node.mode });
         var value = new ColorScale("scale", void 0, scaleParams);
@@ -781,6 +799,6 @@ var CoreEvaluator = (function (_super) {
         return obj;
     };
     return CoreEvaluator;
-})(Evaluator);
+}(Evaluator));
 exports.CoreEvaluator = CoreEvaluator;
 //# sourceMappingURL=eval-scope.js.map

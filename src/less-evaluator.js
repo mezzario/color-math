@@ -1,4 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -45,14 +46,7 @@ var LessEvaluator = (function (_super) {
         return value;
     };
     LessEvaluator.prototype.evalArrayElement = function (node) {
-        var indexStr;
-        if (node.index instanceof ParserScope.NumberLiteralExpr) {
-            var index = this.getCore().evalNumberLiteral(node.index);
-            indexStr = String(index + 1);
-        }
-        else
-            indexStr = node.index.evaluate(this) + " + 1";
-        var value = "extract(" + node.array.evaluate(this) + ", " + indexStr + ")";
+        var value = "extract(" + this.unwrapParens(node.obj).evaluate(this) + ", " + (node.name + 1) + ")";
         return value;
     };
     LessEvaluator.prototype.evalColorNameLiteral = function (node) {
@@ -132,8 +126,8 @@ var LessEvaluator = (function (_super) {
     };
     LessEvaluator.prototype.evalColorsMix = function (node) {
         var params = [
-            node.left.evaluate(this),
-            node.right.evaluate(this)
+            this.unwrapParens(node.left).evaluate(this),
+            this.unwrapParens(node.right).evaluate(this)
         ];
         var ratioExpr = (node.options || {}).ratio;
         if (ratioExpr)
@@ -185,7 +179,7 @@ var LessEvaluator = (function (_super) {
     LessEvaluator.prototype.evalManageColorLuminance = function (node) {
         var res = void 0;
         if (node.value === void 0)
-            res = "luma(" + node.obj.evaluate(this) + ")";
+            res = "luma(" + this.unwrapParens(node.obj).evaluate(this) + ")";
         else
             utils_1.throwError("setting luminance is not supported by LESS", node.$loc);
         return res;
@@ -193,7 +187,7 @@ var LessEvaluator = (function (_super) {
     LessEvaluator.prototype.evalManageColorAlpha = function (node) {
         var res = void 0;
         if (node.value === void 0)
-            res = "alpha(" + node.obj.evaluate(this) + ")";
+            res = "alpha(" + this.unwrapParens(node.obj).evaluate(this) + ")";
         else {
             if (node.operator === "+")
                 res = this.funcOp(node.obj, node.value, "fadein", true);
@@ -264,7 +258,7 @@ var LessEvaluator = (function (_super) {
         if (rightIsPercentage === void 0) { rightIsPercentage = false; }
         if (relative === void 0) { relative = false; }
         var params = [
-            nodeLeft.evaluate(this),
+            this.unwrapParens(nodeLeft).evaluate(this),
             rightIsPercentage ? this.toPercentage(nodeRight) : nodeRight.evaluate(this)
         ];
         if (relative)
@@ -290,6 +284,6 @@ var LessEvaluator = (function (_super) {
         utils_1.throwError("'" + utils_1.BlendMode[mode] + "' blending function is not supported by LESS", loc);
     };
     return LessEvaluator;
-})(eval_scope_1.Evaluator);
+}(eval_scope_1.Evaluator));
 exports.LessEvaluator = LessEvaluator;
 //# sourceMappingURL=less-evaluator.js.map

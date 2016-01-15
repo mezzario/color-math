@@ -152,16 +152,6 @@ export class ArrayLiteralExpr extends Expr {
     }
 }
 
-export class ArrayElementExpr extends Expr {
-    constructor(public array: Expr, public index: Expr, $loc?) {
-        super("arrayElement", $loc);
-    }
-
-    protected evaluateInternal(e: Evaluator) {
-        return e.evalArrayElement(this);
-    }
-}
-
 export class ColorNameLiteralExpr extends Expr {
     constructor(public value: string, $loc?) {
         super("colorNameLiteral", $loc);
@@ -234,8 +224,8 @@ export class RandomColorExpr extends Expr {
 
 export class ScaleExpr extends Expr {
     constructor(
-        public colors: Expr,
-        public domain?: Expr,
+        public colors: Expr | Expr[],
+        public domain?: Expr[],
         public mode?: string,
         $loc?
     ) {

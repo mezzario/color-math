@@ -1,4 +1,5 @@
 /// <reference path="../typings/tsd.d.ts" />
+"use strict";
 var _ = require("lodash");
 var ReadLine = require("readline");
 var CliColor = require("cli-color");

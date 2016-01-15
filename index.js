@@ -1,3 +1,4 @@
+"use strict";
 var _ = require("lodash");
 var ParserScope = require("./src/parser-scope");
 exports.ParserScope = ParserScope;

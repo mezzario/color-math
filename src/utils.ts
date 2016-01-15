@@ -283,12 +283,12 @@ export function forceType(value, type: ValueType | ValueType[], loc?) {
     if (!_.any(types, t => (t & valueType) === t)) {
         let strs = _.map(types, t => {
             switch (t) {
-                case ValueType.Number:      return "number";
-                case ValueType.Color:       return "color";
-                case ValueType.ColorScale:  return "color scale";
-                case ValueType.Array:       return "array";
-                case ValueType.NumberArray: return "number array";
-                case ValueType.ColorArray:  return "color array";
+                case ValueType.Number:      return "a number";
+                case ValueType.Color:       return "a color";
+                case ValueType.ColorScale:  return "a color scale";
+                case ValueType.Array:       return "an array";
+                case ValueType.NumberArray: return "a number array";
+                case ValueType.ColorArray:  return "a color array";
                 default:                    throw "invalid value type";
             }
         });
