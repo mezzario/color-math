@@ -306,6 +306,8 @@ export function forceType(value, type: ValueType | ValueType[], loc?) {
 export function forceRange(value, loc?) {
     if (getType(value) !== ValueType.NumberArray || (<number[]>value).length !== 2)
         throwError("operand is not valid numeric range", loc);
+
+    return value;
 }
 
 export function cloneValue(value) {

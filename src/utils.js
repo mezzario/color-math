@@ -270,6 +270,7 @@ exports.forceType = forceType;
 function forceRange(value, loc) {
     if (getType(value) !== ValueType.NumberArray || value.length !== 2)
         throwError("operand is not valid numeric range", loc);
+    return value;
 }
 exports.forceRange = forceRange;
 function cloneValue(value) {

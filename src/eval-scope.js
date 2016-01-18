@@ -331,29 +331,29 @@ var Evaluator = (function () {
     Evaluator.prototype.getColorScaleParamDefs = function (scaleName) {
         var _this = this;
         var defs = [{
-                re: /^padding|pad|p$/i,
+                re: /^(padding|pad|p)$/i,
                 set: function (node) { return _this.evalSetColorScalePadding(node); }
             }];
         if (scaleName === "scale")
             defs.push.apply(defs, [{
-                    re: /^domain|dom|d$/i,
+                    re: /^(domain|dom|d)$/i,
                     set: function (node) { return _this.evalSetScaleDomain(node); }
                 }]);
         if (scaleName === "cubehelix")
             defs.push.apply(defs, [{
-                    re: /^start|s$/i,
+                    re: /^(start|s)$/i,
                     set: function (node) { return _this.evalSetCubehelixStart(node); }
                 }, {
-                    re: /^rotations|rot|r$/i,
+                    re: /^(rotations|rot|r)$/i,
                     set: function (node) { return _this.evalSetCubehelixRotations(node); }
                 }, {
-                    re: /^hue|h$/i,
+                    re: /^(hue|h)$/i,
                     set: function (node) { return _this.evalSetCubehelixHue(node); }
                 }, {
-                    re: /^gamma|g$/i,
+                    re: /^(gamma|g)$/i,
                     set: function (node) { return _this.evalSetCubehelixGamma(node); }
                 }, {
-                    re: /^lightness|lt|l$/i,
+                    re: /^(lightness|lt|l)$/i,
                     set: function (node) { return _this.evalSetCubehelixLightness(node); }
                 }]);
         return defs;
@@ -716,6 +716,8 @@ var CoreEvaluator = (function (_super) {
     };
     CoreEvaluator.prototype.evalSetCubehelixLightness = function (node) {
         var value = utils_1.forceRange(node.value.evaluate(this), node.value.$loc);
+        if (value[0] === value[1])
+            utils_1.throwError("empty 'lightness' range");
         var obj = this.addColorScaleParam(node, false, "lightness", value);
         return obj;
     };

@@ -507,31 +507,31 @@ export abstract class Evaluator {
 
     protected getColorScaleParamDefs(scaleName: string) {
         let defs = <IParamDef[]>[{
-            re: /^padding|pad|p$/i,
+            re: /^(padding|pad|p)$/i,
             set: node => this.evalSetColorScalePadding(node)
         }];
 
         if (scaleName === "scale")
             defs.push.apply(defs, <IParamDef[]>[{
-                re: /^domain|dom|d$/i,
+                re: /^(domain|dom|d)$/i,
                 set: node => this.evalSetScaleDomain(node)
             }]);
 
         if (scaleName === "cubehelix")
             defs.push.apply(defs, <IParamDef[]>[{
-                re: /^start|s$/i,
+                re: /^(start|s)$/i,
                 set: node => this.evalSetCubehelixStart(node)
             }, {
-                re: /^rotations|rot|r$/i,
+                re: /^(rotations|rot|r)$/i,
                 set: node => this.evalSetCubehelixRotations(node)
             }, {
-                re: /^hue|h$/i,
+                re: /^(hue|h)$/i,
                 set: node => this.evalSetCubehelixHue(node)
             }, {
-                re: /^gamma|g$/i,
+                re: /^(gamma|g)$/i,
                 set: node => this.evalSetCubehelixGamma(node)
             }, {
-                re: /^lightness|lt|l$/i,
+                re: /^(lightness|lt|l)$/i,
                 set: node => this.evalSetCubehelixLightness(node)
             }]);
 
@@ -978,6 +978,9 @@ export class CoreEvaluator extends Evaluator {
 
     evalSetCubehelixLightness(node: ParserScope.ParamExpr) {
         let value = forceRange(node.value.evaluate(this), node.value.$loc);
+        if (value[0] === value[1])
+            throwError("empty 'lightness' range");
+
         let obj = this.addColorScaleParam(node, false, "lightness", value);
         return obj;
     }
