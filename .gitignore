@@ -1,7 +1,7 @@
-.vs
-bin
-obj
-node_modules
+.vscode/
+node_modules/
+lib/
+dist/
+es/
 .DS_Store
-.ntvs_analysis.dat
-npm-debug.log
+*.log

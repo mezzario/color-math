@@ -1,0 +1,21 @@
+{
+    "presets": [
+        ["es2015", { "modules": false }]
+    ],
+    "plugins": [
+        "transform-class-properties"
+    ],
+    "ignore": [
+        "src/Parser.js"
+    ],
+    "env": {
+        "commonjs": {
+            "presets": [
+                ["es2015", { "modules": "commonjs" }]
+            ],
+            "plugins": [
+                "transform-class-properties"
+            ]
+        }
+    }
+}

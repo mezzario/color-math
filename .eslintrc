@@ -1,0 +1,27 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings"
+    ],
+    "parser": "babel-eslint",
+    "ecmaFeatures": {
+        "modules": true
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+        "mocha": true
+    },
+    "rules": {
+        "quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": true }],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
+        "semi": ["warn", "never"],
+        "no-console": "warn",
+        "no-unused-vars": ["warn", { "varsIgnorePattern": "__" }],
+        "comma-dangle": ["error", "never"],
+
+        "import/no-named-as-default-member": "off"
+    }
+}
