@@ -367,6 +367,7 @@ export declare namespace Utils {
     export function cloneValue(value)
     export function forceNumInRange(value, range: number[], loc?): number
     export function forceNumInRange(value, min: number, max: number, loc?): number
+    export function getObjKey(obj, value)
 }
 
 export interface EvaluateOptions {

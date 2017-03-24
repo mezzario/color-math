@@ -56,7 +56,7 @@ export default class LessEvaluator extends EvaluatorBase {
     }
 
     evalArrayElement(node) {
-        let value = `extract(${this.unwrapParens(node.obj).evaluate(this)}, ${node.name + 1})`
+        let value = `extract(${this._unwrapParens(node.obj).evaluate(this)}, ${node.name + 1})`
 
         return value
     }
@@ -146,8 +146,8 @@ export default class LessEvaluator extends EvaluatorBase {
     evalColorAndNumberDivision(node)       { return this._arithmeticOp(node) }
 
     evalNumberPower(node) {
-        let left = node.left.evaluate(this)
-        let right = node.right.evaluate(this)
+        let left = this._unwrapParens(node.left).evaluate(this)
+        let right = this._unwrapParens(node.right).evaluate(this)
         let value = `pow(${left}, ${right})`
 
         return value
@@ -159,8 +159,8 @@ export default class LessEvaluator extends EvaluatorBase {
 
     evalColorsMix(node) {
         let params = [
-            this.unwrapParens(node.left).evaluate(this),
-            this.unwrapParens(node.right).evaluate(this)
+            this._unwrapParens(node.left).evaluate(this),
+            this._unwrapParens(node.right).evaluate(this)
         ]
 
         let ratioExpr = (node.options || {}).ratio
@@ -225,7 +225,7 @@ export default class LessEvaluator extends EvaluatorBase {
         let res = void 0
 
         if (node.value === void 0)
-            res = `luma(${this.unwrapParens(node.obj).evaluate(this)})`
+            res = `luma(${this._unwrapParens(node.obj).evaluate(this)})`
         else
             Utils.throwError(`setting luminance is not supported by LESS`, node.$loc)
 
@@ -236,7 +236,7 @@ export default class LessEvaluator extends EvaluatorBase {
         let res = void 0
 
         if (node.value === void 0)
-            res = `alpha(${this.unwrapParens(node.obj).evaluate(this)})`
+            res = `alpha(${this._unwrapParens(node.obj).evaluate(this)})`
         else {
             if (node.operator === "+")
                 res = this._funcOp(node.obj, node.value, "fadein", true)
@@ -324,7 +324,7 @@ export default class LessEvaluator extends EvaluatorBase {
 
     _funcOp(nodeLeft, nodeRight, func, rightIsPercentage = false, relative = false) {
         let params = [
-            this.unwrapParens(nodeLeft).evaluate(this),
+            this._unwrapParens(nodeLeft).evaluate(this),
             rightIsPercentage ? this._toPercentage(nodeRight) : nodeRight.evaluate(this)
         ]
 
@@ -353,6 +353,6 @@ export default class LessEvaluator extends EvaluatorBase {
     }
 
     _unspColorBlend(mode, loc) {
-        Utils.throwError(`'${BlendMode[mode]}' blending function is not supported by LESS`, loc)
+        Utils.throwError(`'${Utils.getObjKey(BlendMode, mode)}' blending function is not supported by LESS`, loc)
     }
 }

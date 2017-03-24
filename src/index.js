@@ -30,6 +30,7 @@ export function evaluate(expr, options) {
     return {
         withAst: options.withAst,
         astWithLocs: options.astWithLocs,
+        evaluator: options.evaluator.$type,
         expr,
         program,
         result: error != null ? null : value,

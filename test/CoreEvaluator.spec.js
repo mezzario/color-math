@@ -1,7 +1,7 @@
 import expect from "expect"
 import * as ColorMath from "../src"
 
-describe("ColorMath", () => {
+describe("CoreEvaluator", () => {
     const expr = (e, r) => {
         const result = ColorMath.evaluate(e)
 

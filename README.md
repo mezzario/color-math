@@ -1,5 +1,5 @@
 # color-math
-[ColorMath](http://colormath.net/) is an expression parser and evaluator to work with color representations. It supports expressions to define colors using different color models, mixing, blending, specific color channel manipulation, scaling, bezier interpolation and more. To achieve this, special [Bison](https://www.wikiwand.com/en/GNU_bison)-like grammar was created.
+[ColorMath](http://colormath.net/) is an expression parser and evaluator dealing with color representations. Using special grammar it supports various color models, mixing, blending, channels manipulation, scaling, bezier interpolation and more. It also supports transpiling most of the expressions to [less.js](https://github.com/less/less.js).
 
 ## Install
 
@@ -25,6 +25,10 @@ console.log(result.result.css()) // prints "rgba(255, 0, 0, 0.3)"
 // arithmetic operations with colors and numbers
 result = ColorMath.evaluate("(#222 + #444) / 2")
 console.log(result.resultStr) // prints "#333333"
+
+// transpile to Less
+result = ColorMath.evaluate("rgb 165 42 42 >> .2", { evaluator: new ColorMath.Evaluators.LessEvaluator() })
+console.log(result.result) // prints "saturate(rgb(165, 42, 42), 20%, relative)"
 ```
 
 [chroma.js](https://github.com/gka/chroma.js/) color library is used internally to manipulate colors and wrap results.
@@ -177,13 +181,9 @@ Expression | Description
 [`red 0f0 blue`](http://colormath.net/#/?red+0f0+blue) | define list of three colors
 [`(pink >> .5) gold`](http://colormath.net/#/?(pink+%3E%3E+.5)+gold) | define list of two colors
 
-### [Brewer Constants](http://www.albany.edu/faculty/fboscoe/papers/harrower2003.pdf)
+### [Brewer](http://www.albany.edu/faculty/fboscoe/papers/harrower2003.pdf) Constants
 
-Expression | Description
---- | ---
-[`YlOrBr`](http://colormath.net/#/?YlOrBr) |
-[`PRGn`](http://colormath.net/#/?PRGn) |
-`...` |
+[`OrRd`](http://colormath.net/#/?OrRd), [`PuBu`](http://colormath.net/#/?PuBu), [`BuPu`](http://colormath.net/#/?BuPu), [`Oranges`](http://colormath.net/#/?Oranges), [`BuGn`](http://colormath.net/#/?BuGn), [`YlOrBr`](http://colormath.net/#/?YlOrBr), [`YlGn`](http://colormath.net/#/?YlGn), [`Reds`](http://colormath.net/#/?Reds), [`RdPu`](http://colormath.net/#/?RdPu), [`Greens`](http://colormath.net/#/?Greens), [`YlGnBu`](http://colormath.net/#/?YlGnBu), [`Purples`](http://colormath.net/#/?Purples), [`GnBu`](http://colormath.net/#/?GnBu), [`Greys`](http://colormath.net/#/?Greys), [`YlOrRd`](http://colormath.net/#/?YlOrRd), [`PuRd`](http://colormath.net/#/?PuRd), [`Blues`](http://colormath.net/#/?Blues), [`PuBuGn`](http://colormath.net/#/?PuBuGn), [`Spectral`](http://colormath.net/#/?Spectral), [`RdYlGn`](http://colormath.net/#/?RdYlGn), [`RdBu`](http://colormath.net/#/?RdBu), [`PiYG`](http://colormath.net/#/?PiYG), [`PRGn`](http://colormath.net/#/?PRGn), [`RdYlBu`](http://colormath.net/#/?RdYlBu), [`BrBG`](http://colormath.net/#/?BrBG), [`RdGy`](http://colormath.net/#/?RdGy), [`PuOr`](http://colormath.net/#/?PuOr), [`Set2`](http://colormath.net/#/?Set2), [`Accent`](http://colormath.net/#/?Accent), [`Set1`](http://colormath.net/#/?Set1), [`Set3`](http://colormath.net/#/?Set3), [`Dark2`](http://colormath.net/#/?Dark2), [`Paired`](http://colormath.net/#/?Paired), [`Pastel2`](http://colormath.net/#/?Pastel2), [`Pastel1`](http://colormath.net/#/?Pastel1)
 
 ### Variables and Statements
 

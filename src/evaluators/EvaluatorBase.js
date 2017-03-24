@@ -265,7 +265,7 @@ export default class EvaluatorBase {
             default: Utils.throwError(`invalid operator '${node.operator}'`)
         }
 
-        Utils.throwError(`${ValueType[Utils.getType(left)]} and ${ValueType[Utils.getType(right)]}`
+        Utils.throwError(`${Utils.getObjKey(ValueType, Utils.getType(left))} and ${Utils.getObjKey(ValueType, Utils.getType(right))}`
             + ` is invalid operand types or sequence for operator '${node.operator}'`, node.$loc)
     }
 

@@ -300,3 +300,9 @@ export function forceNumInRange(value, minOrRange, maxOrLoc, loc) {
 
     return n
 }
+
+export function getObjKey(obj, value) {
+    for (const key in obj)
+        if ((!obj.hasOwnProperty || obj.hasOwnProperty(key)) && obj[key] === value)
+            return key
+}
