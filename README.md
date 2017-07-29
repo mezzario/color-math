@@ -85,10 +85,10 @@ Expression | Description
 [`#444 * 2`](http://colormath.net/#/?%23444+%2A+2) | arithmetic operations with numbers
 [`skyblue - 0xf`](http://colormath.net/#/?skyblue+-+0xf) | arithmetic operations with numbers
 [`~red`](http://colormath.net/#/?~red) | invert color
-[`red | green`](http://colormath.net/#/?red+%7C+green) | mix colors
-[`red | {25%} green`](http://colormath.net/#/?red+%7C+%7B25%25%7D+green) | mix colors in variable proportion
-[`red | {25% hsl} green`](http://colormath.net/#/?red+%7C+%7B25%25+hsl%7D+green) | mix colors in variable proportion and specific color model
-[`red | {hsl} green`](http://colormath.net/#/?red+%7C+%7Bhsl%7D+green) | mix colors in specific color model
+[`red \| green`](http://colormath.net/#/?red+%7C+green) | mix colors
+[`red \| {25%} green`](http://colormath.net/#/?red+%7C+%7B25%25%7D+green) | mix colors in variable proportion
+[`red \| {25% hsl} green`](http://colormath.net/#/?red+%7C+%7B25%25+hsl%7D+green) | mix colors in variable proportion and specific color model
+[`red \| {hsl} green`](http://colormath.net/#/?red+%7C+%7Bhsl%7D+green) | mix colors in specific color model
 [`hotpink << 50%`](http://colormath.net/#/?hotpink+%3C%3C+50%25) | desaturate color
 [`rgb 165 42 42 >> .2`](http://colormath.net/#/?rgb+165+42+42+%3E%3E+.2) | saturate color
 [`temp 4000 <<< 30%`](http://colormath.net/#/?temp+4000+%3C%3C%3C+30%25) | darken color
