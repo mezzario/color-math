@@ -1,5 +1,5 @@
 import cloneDeepWith from "lodash.clonedeepwith"
-import * as Utils from "../Utils"
+import * as Utils from "../utils"
 import Loc from "./Loc"
 import ColorScale from "../ColorScale"
 

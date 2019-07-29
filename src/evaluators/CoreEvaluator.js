@@ -1,7 +1,7 @@
 const Chroma = require("chroma-js")
 import EvaluatorBase from "./EvaluatorBase"
 import ColorScale from "../ColorScale"
-import * as Utils from "../Utils"
+import * as Utils from "../utils"
 import ValueType from "../ValueType"
 import BlendMode from "../BlendMode"
 

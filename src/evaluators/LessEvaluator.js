@@ -1,5 +1,5 @@
 ﻿import EvaluatorBase from "./EvaluatorBase"
-import * as Utils from "../Utils"
+import * as Utils from "../utils"
 import BlendMode from "../BlendMode"
 import { PercentExpr, NumberLiteralExpr } from "../nodes"
 import CoreEvaluator from "./CoreEvaluator"

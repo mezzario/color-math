@@ -1,4 +1,4 @@
-﻿import * as Utils from "../Utils"
+﻿import * as Utils from "../utils"
 import ValueType from "../ValueType"
 import { ParenthesesExpr } from "../nodes"
 
