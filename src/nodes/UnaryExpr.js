@@ -1,13 +1,13 @@
-import OperationExpr from "./OperationExpr"
+import OperationExpr from './OperationExpr'
 
 export default class UnaryExpr extends OperationExpr {
-    constructor(value, operator, options, $loc) {
-        super("unary", operator, options, $loc)
+  constructor(value, operator, options, $loc) {
+    super('unary', operator, options, $loc)
 
-        this.value = value
-    }
+    this.value = value
+  }
 
-    _evaluateInternal(e) {
-        return e.evalUnaryOperation(this)
-    }
+  _evaluateInternal(e) {
+    return e.evalUnaryOperation(this)
+  }
 }

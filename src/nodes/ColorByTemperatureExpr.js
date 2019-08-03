@@ -1,13 +1,13 @@
-import Expr from "./Expr"
+import Expr from './Expr'
 
 export default class ColorByTemperatureExpr extends Expr {
-    constructor(value, $loc) {
-        super("colorByTemperature", $loc)
+  constructor(value, $loc) {
+    super('colorByTemperature', $loc)
 
-        this.value = value
-    }
+    this.value = value
+  }
 
-    _evaluateInternal(e) {
-        return e.evalColorByTemperature(this)
-    }
+  _evaluateInternal(e) {
+    return e.evalColorByTemperature(this)
+  }
 }

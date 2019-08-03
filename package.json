@@ -1,6 +1,6 @@
 {
   "name": "color-math",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "expressions to manipulate colors",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -13,18 +13,18 @@
     "index.d.ts"
   ],
   "scripts": {
+    "start": "babel-node --presets env --plugins transform-class-properties repl",
     "clean": "rimraf lib dist es",
-    "build": "npm run clean && npm run build:parser && npm run build:commonjs && npm run build:umd && npm run build:umd:min && npm run build:es",
-    "prepublish": "npm run clean && npm run test && npm run build",
+    "prepublishOnly": "npm run clean && npm run test && npm run build",
     "posttest": "npm run lint",
     "lint": "eslint src test",
-    "test": "cross-env BABEL_ENV=commonjs mocha --compilers js:babel-core/register --reporter spec test/*.js",
-    "build:parser": "node node_modules/jison/lib/cli src/grammar.jison -o src/Parser.js -p lalr",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib && cp src/Parser.js lib/Parser.js",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es && cp src/Parser.js es/Parser.js",
+    "test": "cross-env BABEL_ENV=commonjs mocha --require @babel/register --reporter spec test/*.js",
+    "build:parser": "node node_modules/jison/lib/cli src/grammar.jison -o src/parser.js -p lalr",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib && cp src/parser.js lib/parser.js",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es && cp src/parser.js es/parser.js",
     "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack --display-modules",
     "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack --display-modules",
-    "start": "babel-node --presets es2015 --plugins transform-class-properties repl"
+    "build": "npm run clean && npm run build:parser && npm run build:commonjs && npm run build:umd && npm run build:umd:min && npm run build:es"
   },
   "repository": {
     "type": "git",
@@ -47,24 +47,27 @@
     "url": "https://github.com/mezzario/color-math/issues"
   },
   "dependencies": {
-    "chalk": "^1.1.3",
-    "chroma-js": "^1.2.2",
+    "chroma-js": "^2.0.4",
     "lodash.clonedeepwith": "^4.5.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-core": "^6.24.0",
-    "babel-eslint": "^7.2.1",
-    "babel-loader": "^6.4.1",
-    "babel-plugin-transform-class-properties": "^6.23.0",
-    "babel-preset-es2015": "^6.24.0",
-    "cross-env": "^3.2.4",
-    "eslint": "^3.18.0",
-    "eslint-plugin-import": "^2.2.0",
-    "expect": "^1.20.2",
-    "jison": "^0.4.17",
-    "mocha": "^3.2.0",
-    "rimraf": "^2.6.1",
-    "webpack": "^2.3.1"
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "chalk": "^2.4.2",
+    "cross-env": "^5.2.0",
+    "eslint": "^6.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "expect": "^24.8.0",
+    "jison": "^0.4.18",
+    "mocha": "^6.2.0",
+    "rimraf": "^2.6.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   }
 }

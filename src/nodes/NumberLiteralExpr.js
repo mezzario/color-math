@@ -1,13 +1,13 @@
-import Expr from "./Expr"
+import Expr from './Expr'
 
 export default class NumberLiteralExpr extends Expr {
-    constructor(value, $loc) {
-        super("numberLiteral", $loc)
+  constructor(value, $loc) {
+    super('numberLiteral', $loc)
 
-        this.value = value
-    }
+    this.value = value
+  }
 
-    _evaluateInternal(e) {
-        return e.evalNumberLiteral(this)
-    }
+  _evaluateInternal(e) {
+    return e.evalNumberLiteral(this)
+  }
 }

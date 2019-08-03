@@ -2,4 +2,4 @@
 dist/
 lib/
 es/
-src/Parser.js
+src/parser.js

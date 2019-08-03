@@ -1,14 +1,14 @@
-import OperationExpr from "./OperationExpr"
+import OperationExpr from './OperationExpr'
 
 export default class BinaryExpr extends OperationExpr {
-    constructor(left, right, operator, options, $loc) {
-        super("binary", operator, options, $loc)
+  constructor(left, right, operator, options, $loc) {
+    super('binary', operator, options, $loc)
 
-        this.left = left
-        this.right = right
-    }
+    this.left = left
+    this.right = right
+  }
 
-    _evaluateInternal(e) {
-        return e.evalBinaryOperation(this)
-    }
+  _evaluateInternal(e) {
+    return e.evalBinaryOperation(this)
+  }
 }

@@ -1,13 +1,13 @@
-import Expr from "./Expr"
+import Expr from './Expr'
 
 export default class ColorByWavelengthExpr extends Expr {
-    constructor(value, $loc) {
-        super("colorByWavelength", $loc)
+  constructor(value, $loc) {
+    super('colorByWavelength', $loc)
 
-        this.value = value
-    }
+    this.value = value
+  }
 
-    _evaluateInternal(e) {
-        return e.evalColorByWavelength(this)
-    }
+  _evaluateInternal(e) {
+    return e.evalColorByWavelength(this)
+  }
 }

@@ -1,13 +1,13 @@
-import Expr from "./Expr"
+import Expr from './Expr'
 
 export default class BrewerConstExpr extends Expr {
-    constructor(name, $loc) {
-        super("brewerConst", $loc)
+  constructor(name, $loc) {
+    super('brewerConst', $loc)
 
-        this.name = name
-    }
+    this.name = name
+  }
 
-    _evaluateInternal(e) {
-        return e.evalBrewerConst(this)
-    }
+  _evaluateInternal(e) {
+    return e.evalBrewerConst(this)
+  }
 }

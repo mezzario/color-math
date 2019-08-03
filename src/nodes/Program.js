@@ -1,19 +1,19 @@
-import Node from "./Node"
+import Node from './Node'
 
 export default class Program extends Node {
-    constructor(statements, $loc) {
-        super("program", $loc)
+  constructor(statements, $loc) {
+    super('program', $loc)
 
-        this.statements = statements
-    }
+    this.statements = statements
+  }
 
-    getDto(withLoc = true) {
-        let dto = super.getDto(withLoc)
-        delete dto.$eval
-        return dto
-    }
+  getDto(withLoc = true) {
+    const dto = super.getDto(withLoc)
+    delete dto.$eval
+    return dto
+  }
 
-    _evaluateInternal(e) {
-        return e.evalProgram(this)
-    }
+  _evaluateInternal(e) {
+    return e.evalProgram(this)
+  }
 }
