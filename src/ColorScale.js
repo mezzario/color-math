@@ -18,13 +18,17 @@ export default class ColorScale {
 
   _getParamValue(params, name) {
     for (let i = 0; i < params.length; i++) {
-      if (params[i].name === name) {return params[i].value}
+      if (params[i].name === name) {
+        return params[i].value
+      }
     }
   }
 
   _applyParams(fn, params) {
     for (let i = 0; i < params.length; i++) {
-      if (params[i].name !== 'colors') {fn = fn[params[i].name](params[i].value)}
+      if (params[i].name !== 'colors') {
+        fn = fn[params[i].name](params[i].value)
+      }
     }
   }
 
@@ -35,7 +39,9 @@ export default class ColorScale {
 
     this._applyParams(fn, this.params)
 
-    if (this.name !== 'scale') {fn = fn.scale()}
+    if (this.name !== 'scale') {
+      fn = fn.scale()
+    }
 
     this._applyParams(fn, this.scaleParams)
 

@@ -1,11 +1,7 @@
-# color-math
+# 🤹 color-math
 [ColorMath](http://colormath.net/) is an expression parser and evaluator dealing with color representations. Using special grammar it supports various color models, mixing, blending, channels manipulation, scaling, bezier interpolation and more. It also supports transpiling most of the expressions to [less.js](https://github.com/less/less.js).
 
 ## Install
-
-`yarn add color-math`
-
-or
 
 `npm i color-math -S`
 

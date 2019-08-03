@@ -7,7 +7,9 @@ export default class Node {
   constructor($type, $loc) {
     this.$type = $type
 
-    if ($loc) {this.$loc = $loc instanceof Loc ? $loc : new Loc($loc)}
+    if ($loc) {
+      this.$loc = $loc instanceof Loc ? $loc : new Loc($loc)
+    }
   }
 
   getDto(withLoc = true) {
@@ -25,7 +27,9 @@ export default class Node {
       }
     })
 
-    if (!withLoc) {delete dto.$loc}
+    if (!withLoc) {
+      delete dto.$loc
+    }
 
     return dto
   }
