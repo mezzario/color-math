@@ -1,0 +1,10 @@
+
+{
+  "search.exclude": {
+    "dist": true,
+    "es": true,
+    "lib": true,
+    "**/node_modules": true,
+    "src/parser.js": true
+  }
+}
