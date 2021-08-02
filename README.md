@@ -10,7 +10,7 @@
 import * as ColorMath from "color-math"
 
 // will return color which is result of mixing red and green colors
-const result = ColorMath.evaluate("red | green")
+let result = ColorMath.evaluate("red | green")
 // prints "#804000" ('result.result' is a chroma.js instance; see link below)
 console.log(result.result.hex())
 
