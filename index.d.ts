@@ -293,9 +293,11 @@ export declare namespace Evaluators {
   }
 
   export class CoreEvaluator extends EvaluatorBase {
+     constructor()
   }
 
   export class LessEvaluator extends EvaluatorBase {
+     constructor()
   }
 }
 
