@@ -3,7 +3,7 @@
   "version": "1.1.3",
   "description": "expressions to manipulate colors",
   "main": "lib/index.js",
-  "jsnext:main": "es/index.js",
+  "module": "es/index.js",
   "typings": "./index.d.ts",
   "files": [
     "dist",
@@ -13,7 +13,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "start": "babel-node --presets env --plugins transform-class-properties repl",
+    "start": "babel-node --presets @babel/preset-env --plugins @babel/plugin-transform-class-properties repl",
     "clean": "rimraf lib dist es",
     "prepublishOnly": "npm run clean && npm run test && npm run build",
     "posttest": "npm run lint",
@@ -22,8 +22,8 @@
     "build:parser": "node node_modules/jison/lib/cli src/grammar.jison -o src/parser.js -p lalr",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib && cp src/parser.js lib/parser.js",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es && cp src/parser.js es/parser.js",
-    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack --display-modules",
-    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack --display-modules",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack --stats=verbose",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack --stats=verbose",
     "build": "npm run clean && npm run build:parser && npm run build:commonjs && npm run build:umd && npm run build:umd:min && npm run build:es"
   },
   "repository": {
@@ -47,27 +47,28 @@
     "url": "https://github.com/mezzario/color-math/issues"
   },
   "dependencies": {
-    "chroma-js": "^2.0.4",
+    "chroma-js": "^3.1.2",
     "lodash.clonedeepwith": "^4.5.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/register": "^7.5.5",
-    "babel-eslint": "^10.0.2",
-    "babel-loader": "^8.0.6",
-    "chalk": "^2.4.2",
-    "cross-env": "^5.2.0",
-    "eslint": "^6.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "expect": "^24.8.0",
+    "@babel/cli": "^7.28.0",
+    "@babel/core": "^7.28.0",
+    "@babel/eslint-parser": "^7.28.0",
+    "@babel/node": "^7.28.0",
+    "@babel/plugin-transform-class-properties": "^7.27.1",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/register": "^7.27.1",
+    "@eslint/js": "^9.33.0",
+    "babel-loader": "^10.0.0",
+    "chalk": "^5.5.0",
+    "cross-env": "^10.0.0",
+    "eslint": "^9.33.0",
+    "eslint-plugin-import": "^2.32.0",
+    "expect": "^30.0.5",
     "jison": "^0.4.18",
-    "mocha": "^6.2.0",
-    "rimraf": "^2.6.3",
-    "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6"
+    "mocha": "^11.7.1",
+    "rimraf": "^6.0.1",
+    "webpack": "^5.101.1",
+    "webpack-cli": "^6.0.1"
   }
 }

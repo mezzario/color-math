@@ -14,12 +14,17 @@ export default {
     path: Path.join(__dirname, 'dist'),
     filename: `color-math${NODE_ENV === 'production' ? '.min' : ''}.js`,
     library: 'ColorMath',
-    libraryTarget: 'umd',
+    library: {
+      type: 'umd'
+    },
     //pathinfo: true
   },
 
-  node: {
-    fs: 'empty',
+  resolve: {
+    fallback: {
+      fs: false,
+      path: false
+    }
   },
 
   module: {
@@ -35,7 +40,6 @@ export default {
   },
 
   plugins: [
-    new Webpack.optimize.OccurrenceOrderPlugin(),
     new Webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     }),
