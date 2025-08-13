@@ -26,6 +26,19 @@
       "plugins": [
         "@babel/plugin-transform-class-properties"
       ]
+    },
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": "commonjs"
+          }
+        ]
+      ],
+      "plugins": [
+        "@babel/plugin-transform-class-properties"
+      ]
     }
   }
 }

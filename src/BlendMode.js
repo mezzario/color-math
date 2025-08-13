@@ -19,4 +19,4 @@ export default {
   Screen: 16,
   SoftLight: 17,
   Subtract: 18,
-}
+};

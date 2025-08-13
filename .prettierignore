@@ -1,0 +1,6 @@
+node_modules/
+dist/
+lib/
+es/
+src/parser.js
+*.md

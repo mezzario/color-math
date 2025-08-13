@@ -1,6 +1,4 @@
-import js from '@eslint/js'
-import importPlugin from 'eslint-plugin-import'
-import babelParser from '@babel/eslint-parser'
+import js from '@eslint/js';
 
 export default [
   {
@@ -9,124 +7,42 @@ export default [
       'dist/**',
       'lib/**',
       'es/**',
-      'src/parser.js'
-    ]
+      'src/parser.js',
+    ],
   },
   js.configs.recommended,
   {
     files: ['**/*.js'],
     languageOptions: {
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          presets: ['@babel/preset-env'],
-          plugins: ['@babel/plugin-transform-class-properties']
-        }
-      },
-      ecmaVersion: 2018,
+      ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
-        console: 'readonly',
+        // Node.js globals for library that runs in Node
         process: 'readonly',
-        Buffer: 'readonly',
-        global: 'readonly',
+        require: 'readonly',
         __dirname: 'readonly',
         __filename: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
-        exports: 'readonly',
+        // Browser globals for UMD build
         window: 'readonly',
-        document: 'readonly'
-      }
-    },
-    plugins: {
-      import: importPlugin
+        document: 'readonly',
+      },
     },
     rules: {
-      'quotes': [
-        'error',
-        'single',
-        {
-          'avoidEscape': true,
-          'allowTemplateLiterals': true
-        }
-      ],
-      'indent': [
-        'error',
-        2,
-        {
-          'SwitchCase': 1
-        }
-      ],
-      'semi': [
-        'error',
-        'never'
-      ],
-      'no-console': 'off',
+      // Code quality rules (not handled by Prettier)
       'no-unused-vars': [
         'warn',
         {
-          'varsIgnorePattern': '__',
-          'ignoreRestSiblings': true
-        }
-      ],
-      'comma-dangle': [
-        'error',
-        {
-          'arrays': 'always-multiline',
-          'objects': 'always-multiline',
-          'imports': 'always-multiline',
-          'exports': 'always-multiline',
-          'functions': 'ignore'
-        }
-      ],
-      'array-bracket-spacing': [
-        'error',
-        'never'
-      ],
-      'object-curly-spacing': [
-        'error',
-        'never'
-      ],
-      'object-shorthand': [
-        'error',
-        'always'
+          varsIgnorePattern: '__',
+          ignoreRestSiblings: true,
+        },
       ],
       'prefer-const': 'error',
       'no-var': 'error',
-      'brace-style': [
-        'error',
-        '1tbs',
-        {
-          'allowSingleLine': true
-        }
-      ],
-      'curly': 'error',
-      'space-before-blocks': 'error',
-      'keyword-spacing': 'error',
-      'comma-spacing': 'error',
-      'arrow-spacing': 'error',
-      'key-spacing': [
-        'error',
-        {
-          'mode': 'minimum'
-        }
-      ],
-      'semi-spacing': 'error',
-      'space-in-parens': [
-        'error',
-        'never'
-      ],
-      'space-infix-ops': 'error',
-      'import/no-named-as-default-member': 'off'
+      'object-shorthand': 'error',
+      curly: 'error',
+
+      // Allow console for library/CLI usage
+      'no-console': 'off',
     },
-    settings: {
-      'import/resolver': {
-        node: {
-          extensions: ['.js', '.jsx']
-        }
-      }
-    }
-  }
-]
+  },
+];

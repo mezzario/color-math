@@ -1,13 +1,13 @@
-import Expr from './Expr'
+import Expr from './Expr';
 
 export default class GetVarExpr extends Expr {
   constructor(name, $loc) {
-    super('getVar', $loc)
+    super('getVar', $loc);
 
-    this.name = name
+    this.name = name;
   }
 
   _evaluateInternal(e) {
-    return e.evalGetVar(this)
+    return e.evalGetVar(this);
   }
 }

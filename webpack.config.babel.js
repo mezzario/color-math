@@ -1,21 +1,19 @@
-import Webpack from 'webpack'
-import Path from 'path'
+import Webpack from 'webpack';
+import Path from 'path';
 
-const {NODE_ENV} = process.env
+const { NODE_ENV } = process.env;
 
 export default {
   mode: NODE_ENV,
 
-  entry: [
-    './src',
-  ],
+  entry: ['./src'],
 
   output: {
     path: Path.join(__dirname, 'dist'),
     filename: `color-math${NODE_ENV === 'production' ? '.min' : ''}.js`,
-    library: 'ColorMath',
     library: {
-      type: 'umd'
+      name: 'ColorMath',
+      type: 'umd',
     },
     //pathinfo: true
   },
@@ -23,16 +21,18 @@ export default {
   resolve: {
     fallback: {
       fs: false,
-      path: false
-    }
+      path: false,
+    },
   },
 
   module: {
-    rules: [{
-      test: /\.js$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/,
-    }],
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+      },
+    ],
   },
 
   optimization: {
@@ -44,4 +44,4 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     }),
   ],
-}
+};

@@ -1,25 +1,29 @@
-const Chroma = require('chroma-js')
+const Chroma = require('chroma-js');
 
 export default class ColorScale {
   constructor(name, params, scaleParams) {
-    this.name = name.toLowerCase()
-    this.params = params || []
-    this.scaleParams = scaleParams || []
+    this.name = name.toLowerCase();
+    this.params = params || [];
+    this.scaleParams = scaleParams || [];
   }
 
   toString() {
-    return `<colorScale.${this.name}>`
+    return `<colorScale.${this.name}>`;
   }
 
   clone() {
-    const obj = new ColorScale(this.name, this.params.slice(0), this.scaleParams.slice(0))
-    return obj
+    const obj = new ColorScale(
+      this.name,
+      this.params.slice(0),
+      this.scaleParams.slice(0)
+    );
+    return obj;
   }
 
   _getParamValue(params, name) {
     for (let i = 0; i < params.length; i++) {
       if (params[i].name === name) {
-        return params[i].value
+        return params[i].value;
       }
     }
   }
@@ -27,24 +31,24 @@ export default class ColorScale {
   _applyParams(fn, params) {
     for (let i = 0; i < params.length; i++) {
       if (params[i].name !== 'colors') {
-        fn = fn[params[i].name](params[i].value)
+        fn = fn[params[i].name](params[i].value);
       }
     }
   }
 
   getFn() {
-    const colors = this._getParamValue(this.scaleParams, 'colors')
-    const ctor = Chroma[this.name]
-    let fn = colors ? ctor(colors) : ctor()
+    const colors = this._getParamValue(this.scaleParams, 'colors');
+    const ctor = Chroma[this.name];
+    let fn = colors ? ctor(colors) : ctor();
 
-    this._applyParams(fn, this.params)
+    this._applyParams(fn, this.params);
 
     if (this.name !== 'scale') {
-      fn = fn.scale()
+      fn = fn.scale();
     }
 
-    this._applyParams(fn, this.scaleParams)
+    this._applyParams(fn, this.scaleParams);
 
-    return fn
+    return fn;
   }
 }
