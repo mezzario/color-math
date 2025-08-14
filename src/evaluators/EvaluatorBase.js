@@ -1,6 +1,6 @@
 ﻿import {getType, getObjKey, throwError} from '../utils.js';
 import {ValueType} from '../ValueType.js';
-import {ParenthesesExpr} from '../nodes/index.js';
+import {ParenthesesExpr} from '../nodes/ParenthesesExpr.js';
 
 export class EvaluatorBase {
   constructor($type) {

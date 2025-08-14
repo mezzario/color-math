@@ -1,7 +1,8 @@
 ﻿import {EvaluatorBase} from './EvaluatorBase.js';
 import {throwError, getObjKey} from '../utils.js';
 import {BlendMode} from '../BlendMode.js';
-import {PercentExpr, NumberLiteralExpr} from '../nodes/index.js';
+import {PercentExpr} from '../nodes/PercentExpr.js';
+import {NumberLiteralExpr} from '../nodes/NumberLiteralExpr.js';
 import {CoreEvaluator} from './CoreEvaluator.js';
 
 export class LessEvaluator extends EvaluatorBase {

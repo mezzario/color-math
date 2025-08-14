@@ -2,11 +2,72 @@ import {isColor, formatColor} from './utils.js';
 import {EvaluatorBase} from './evaluators/EvaluatorBase.js';
 import {CoreEvaluator} from './evaluators/CoreEvaluator.js';
 import {LessEvaluator} from './evaluators/LessEvaluator.js';
-import {Nodes} from './nodes/index.js';
 import {parser} from './parser.js';
 import {ColorScale} from './ColorScale.js';
 import {ValueType} from './ValueType.js';
 import {BlendMode} from './BlendMode.js';
+
+import {ArrayLiteralExpr} from './nodes/ArrayLiteralExpr.js';
+import {BezierExpr} from './nodes/BezierExpr.js';
+import {BinaryExpr} from './nodes/BinaryExpr.js';
+import {BrewerConstExpr} from './nodes/BrewerConstExpr.js';
+import {ColorByNumberExpr} from './nodes/ColorByNumberExpr.js';
+import {ColorBySpaceParams} from './nodes/ColorBySpaceParams.js';
+import {ColorByTemperatureExpr} from './nodes/ColorByTemperatureExpr.js';
+import {ColorByWavelengthExpr} from './nodes/ColorByWavelengthExpr.js';
+import {ColorHexLiteralExpr} from './nodes/ColorHexLiteralExpr.js';
+import {ColorNameLiteralExpr} from './nodes/ColorNameLiteralExpr.js';
+import {CubehelixExpr} from './nodes/CubehelixExpr.js';
+import {Expr} from './nodes/Expr.js';
+import {GetParamExpr} from './nodes/GetParamExpr.js';
+import {GetVarExpr} from './nodes/GetVarExpr.js';
+import {Loc} from './nodes/Loc.js';
+import {LocPos} from './nodes/LocPos.js';
+import {Node} from './nodes/Node.js';
+import {NumberLiteralExpr} from './nodes/NumberLiteralExpr.js';
+import {OperationExpr} from './nodes/OperationExpr.js';
+import {ParamExpr} from './nodes/ParamExpr.js';
+import {ParenthesesExpr} from './nodes/ParenthesesExpr.js';
+import {PercentExpr} from './nodes/PercentExpr.js';
+import {Program} from './nodes/Program.js';
+import {RandomColorExpr} from './nodes/RandomColorExpr.js';
+import {ScaleExpr} from './nodes/ScaleExpr.js';
+import {SetParamExpr} from './nodes/SetParamExpr.js';
+import {SetVarExpr} from './nodes/SetVarExpr.js';
+import {Statement} from './nodes/Statement.js';
+import {UnaryExpr} from './nodes/UnaryExpr.js';
+
+const Nodes = {
+  ArrayLiteralExpr,
+  BezierExpr,
+  BinaryExpr,
+  BrewerConstExpr,
+  ColorByNumberExpr,
+  ColorBySpaceParams,
+  ColorByTemperatureExpr,
+  ColorByWavelengthExpr,
+  ColorHexLiteralExpr,
+  ColorNameLiteralExpr,
+  CubehelixExpr,
+  Expr,
+  GetParamExpr,
+  GetVarExpr,
+  Loc,
+  LocPos,
+  Node,
+  NumberLiteralExpr,
+  OperationExpr,
+  ParamExpr,
+  ParenthesesExpr,
+  PercentExpr,
+  Program,
+  RandomColorExpr,
+  ScaleExpr,
+  SetParamExpr,
+  SetVarExpr,
+  Statement,
+  UnaryExpr,
+};
 
 parser.yy = Nodes;
 

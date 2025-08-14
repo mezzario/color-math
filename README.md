@@ -1,4 +1,5 @@
 # 🤹 color-math
+
 [ColorMath](http://colormath.net/) is an expression parser and evaluator dealing with color representations. Using special grammar it supports various color models, mixing, blending, channels manipulation, scaling, bezier interpolation and more. It also supports transpiling most of the expressions to [less.js](https://github.com/less/less.js).
 
 ## Install
@@ -7,26 +8,26 @@
 
 ## Usage Example
 
-```javascript
-import {evaluate as cm, LessEvaluator} from "color-math";
+```js
+import {evaluate as cm, LessEvaluator} from 'color-math';
 
 // Will return color which is result of mixing red and green colors.
-const result = cm("red | green");
-// Prints "#804000" (`result.result` is a chroma.js instance; see link below).
+const result = cm('red | green');
+// Prints '#804000' (`result.result` is a chroma.js instance; see link below).
 console.log(result.result.hex());
 
 // Set color's alpha channel to 30%.
-result = cm("red @a 30%");
-// Prints "rgba(255, 0, 0, 0.3)".
+result = cm('red @a 30%');
+// Prints 'rgba(255, 0, 0, 0.3)'.
 console.log(result.result.css());
 
 // Arithmetic operations with colors and numbers.
-result = cm("(#222 + #444) / 2");
-console.log(result.resultStr); // Prints "#333333".
+result = cm('(#222 + #444) / 2');
+console.log(result.resultStr); // Prints '#333333'.
 
 // Transpile to Less.
-result = cm("rgb 165 42 42 >> .2", {evaluator: new LessEvaluator()});
-// Prints "saturate(rgb(165, 42, 42), 20%, relative)".
+result = cm('rgb 165 42 42 >> .2', {evaluator: new LessEvaluator()});
+// Prints 'saturate(rgb(165, 42, 42), 20%, relative)'.
 console.log(result.result);
 ```
 
