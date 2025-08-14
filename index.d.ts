@@ -15,7 +15,13 @@ export declare namespace Nodes {
     start: LocPos;
     end: LocPos;
 
-    constructor(loc);
+    constructor(loc: {
+      first_line: number;
+      first_column: number;
+      last_line: number;
+      last_column: number;
+      range: [number, number];
+    });
 
     toString(): string;
   }
@@ -26,93 +32,93 @@ export declare namespace Nodes {
 
     constructor($type: string, $loc: Loc);
 
-    getDto(withLoc?: boolean);
+    getDto(withLoc?: boolean): object;
     evaluate(e: EvaluatorBase);
   }
 
   export class Program extends Node {
     statements: Statement[];
 
-    constructor(statements: Statement[], $loc?);
+    constructor(statements: Statement[], $loc?: Loc);
 
-    getDto(withLoc?: boolean);
+    getDto(withLoc?: boolean): object;
   }
 
   export class Statement extends Node {
     expr: Expr;
 
-    constructor(expr: Expr, $loc?);
+    constructor(expr: Expr, $loc?: Loc);
 
-    getDto(withLoc?: boolean);
+    getDto(withLoc?: boolean): object;
   }
 
   export abstract class Expr extends Node {
-    constructor($type: string, $loc?);
+    constructor($type: string, $loc?: Loc);
   }
 
   export class ParenthesesExpr extends Expr {
     expr: Expr;
 
-    constructor(expr: Expr, $loc?);
+    constructor(expr: Expr, $loc?: Loc);
   }
 
   export class NumberLiteralExpr extends Expr {
     value: string;
 
-    constructor(value: string, $loc?);
+    constructor(value: string, $loc?: Loc);
   }
 
   export class PercentExpr extends Expr {
     value: NumberLiteralExpr;
 
-    constructor(value: NumberLiteralExpr, $loc?);
+    constructor(value: NumberLiteralExpr, $loc?: Loc);
   }
 
   export class ArrayLiteralExpr extends Expr {
     value: Expr[];
 
-    constructor(value: Expr[], $loc?);
+    constructor(value: Expr[], $loc?: Loc);
   }
 
   export class ColorNameLiteralExpr extends Expr {
     value: string;
 
-    constructor(value: string, $loc?);
+    constructor(value: string, $loc?: Loc);
   }
 
   export class ColorHexLiteralExpr extends Expr {
     value: string;
 
-    constructor(value: string, $loc?);
+    constructor(value: string, $loc?: Loc);
   }
 
   export class ColorByNumberExpr extends Expr {
     value: Expr;
 
-    constructor(value: Expr, $loc?);
+    constructor(value: Expr, $loc?: Loc);
   }
 
   export class ColorByTemperatureExpr extends Expr {
     value: Expr;
 
-    constructor(value: Expr, $loc?);
+    constructor(value: Expr, $loc?: Loc);
   }
 
   export class ColorByWavelengthExpr extends Expr {
     value: Expr;
 
-    constructor(value: Expr, $loc?);
+    constructor(value: Expr, $loc?: Loc);
   }
 
   export class ColorBySpaceParams extends Expr {
     space: string;
     params: Expr[];
 
-    constructor(space: string, params: Expr[], $loc?);
+    constructor(space: string, params: Expr[], $loc?: Loc);
   }
 
   export class RandomColorExpr extends Expr {
-    constructor($loc?);
+    constructor($loc?: Loc);
   }
 
   export class ScaleExpr extends Expr {
@@ -120,23 +126,28 @@ export declare namespace Nodes {
     domain: Expr[];
     mode: string;
 
-    constructor(colors: Expr | Expr[], domain?: Expr[], mode?: string, $loc?);
+    constructor(
+      colors: Expr | Expr[],
+      domain?: Expr[],
+      mode?: string,
+      $loc?: Loc
+    );
   }
 
   export class BezierExpr extends Expr {
     colors: Expr;
 
-    constructor(colors: Expr, $loc?);
+    constructor(colors: Expr, $loc?: Loc);
   }
 
   export class CubehelixExpr extends Expr {
-    constructor($loc?);
+    constructor($loc?: Loc);
   }
 
   export class BrewerConstExpr extends Expr {
     name: string;
 
-    constructor(name: string, $loc?);
+    constructor(name: string, $loc?: Loc);
   }
 
   export abstract class ParamExpr extends Expr {
@@ -151,12 +162,12 @@ export declare namespace Nodes {
       name: string,
       value?: Expr,
       operator?: string,
-      $loc?
+      $loc?: Loc
     );
   }
 
   export class GetParamExpr extends ParamExpr {
-    constructor(obj: Expr, name: string, $loc?);
+    constructor(obj: Expr, name: string, $loc?: Loc);
   }
 
   export class SetParamExpr extends ParamExpr {
@@ -165,7 +176,7 @@ export declare namespace Nodes {
       name: string,
       value?: Expr,
       operator?: string,
-      $loc?
+      $loc?: Loc
     );
   }
 
@@ -173,7 +184,7 @@ export declare namespace Nodes {
     operator: string;
     options;
 
-    constructor($type: string, operator: string, options, $loc?);
+    constructor($type: string, operator: string, options, $loc?: Loc);
   }
 
   export class UnaryExpr extends OperationExpr {
@@ -181,7 +192,7 @@ export declare namespace Nodes {
     operator: string;
     options;
 
-    constructor(value: Expr, operator: string, options, $loc?);
+    constructor(value: Expr, operator: string, options, $loc?: Loc);
   }
 
   export class BinaryExpr extends OperationExpr {
@@ -190,20 +201,20 @@ export declare namespace Nodes {
     operator: string;
     options;
 
-    constructor(left: Expr, right: Expr, operator: string, options, $loc?);
+    constructor(left: Expr, right: Expr, operator: string, options, $loc?: Loc);
   }
 
   export class GetVarExpr extends Expr {
     name: string;
 
-    constructor(name: string, $loc?);
+    constructor(name: string, $loc?: Loc);
   }
 
   export class SetVarExpr extends Expr {
     name: string;
     value: Expr;
 
-    constructor(name: string, value: Expr, $loc?);
+    constructor(name: string, value: Expr, $loc?: Loc);
   }
 }
 
@@ -301,7 +312,7 @@ export declare abstract class EvaluatorBase {
   evalExclusionBlend(node: Nodes.BinaryExpr): Chroma.Color;
   evalNegateBlend(node: Nodes.BinaryExpr): Chroma.Color;
   evalGetVar(node: Nodes.GetVarExpr);
-  evalSetVar(node: Nodes.SetVarExpr);
+  evalSetVar(node: Nodes.SetVarExpr): string | void;
 }
 
 export declare class CoreEvaluator extends EvaluatorBase {
@@ -393,19 +404,23 @@ export declare namespace Utils {
     appendName?: boolean
   ): string;
   export function colorFromWavelength(wl: number): Chroma.Color;
-  export function throwError(error: string, loc?): void;
+  export function throwError(error: string, loc?: Loc): void;
   export function getType(value): ValueType;
-  export function forceType(value, type: ValueType | ValueType[], loc?);
-  export function forceRange(value, loc?): number[];
+  export function forceType(value, type: ValueType | ValueType[], loc?: Loc);
+  export function forceRange(value, loc?: Loc): number[];
   export function cloneValue(value);
-  export function forceNumInRange(value, range: number[], loc?): number;
   export function forceNumInRange(
-    value,
+    value: number,
+    range: number[],
+    loc?: Loc
+  ): number;
+  export function forceNumInRange(
+    value: number,
     min: number,
     max: number,
-    loc?
+    loc?: Loc
   ): number;
-  export function getObjKey(obj, value): string | undefined;
+  export function getObjKey(obj: object, value): string | undefined;
 }
 
 export interface EvaluateOptions {
