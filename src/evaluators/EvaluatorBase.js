@@ -1,8 +1,8 @@
-﻿import * as Utils from '../utils';
-import ValueType from '../ValueType';
-import { ParenthesesExpr } from '../nodes';
+﻿import {getType, getObjKey, throwError} from '../utils.js';
+import {ValueType} from '../ValueType.js';
+import {ParenthesesExpr} from '../nodes/index.js';
 
-export default class EvaluatorBase {
+export class EvaluatorBase {
   constructor($type) {
     if (this.constructor === EvaluatorBase) {
       throw new Error("Can't instantiate abstract class");
@@ -89,7 +89,7 @@ export default class EvaluatorBase {
 
   evalParam(node) {
     const obj = node.obj.evaluate(this.core);
-    const objType = Utils.getType(obj);
+    const objType = getType(obj);
     let defs = [];
 
     switch (objType) {
@@ -273,18 +273,12 @@ export default class EvaluatorBase {
     const left = node.left.evaluate(this.core);
     const right = node.right.evaluate(this.core);
 
-    const isNumbers = [left, right].every(
-      v => Utils.getType(v) === ValueType.Number
-    );
-    const isColors = [left, right].every(
-      v => Utils.getType(v) === ValueType.Color
-    );
+    const isNumbers = [left, right].every(v => getType(v) === ValueType.Number);
+    const isColors = [left, right].every(v => getType(v) === ValueType.Color);
     const isColorAndNumber =
-      Utils.getType(left) === ValueType.Color &&
-      Utils.getType(right) === ValueType.Number;
+      getType(left) === ValueType.Color && getType(right) === ValueType.Number;
     const isNumberAndColor =
-      Utils.getType(left) === ValueType.Number &&
-      Utils.getType(right) === ValueType.Color;
+      getType(left) === ValueType.Number && getType(right) === ValueType.Color;
 
     switch (node.operator) {
       case '+':
@@ -354,8 +348,8 @@ export default class EvaluatorBase {
 
       case '->':
         if (
-          Utils.getType(left) === ValueType.ColorScale &&
-          Utils.getType(right) === ValueType.Number
+          getType(left) === ValueType.ColorScale &&
+          getType(right) === ValueType.Number
         ) {
           return this.evalColorsFromScaleProduction(node);
         } else {
@@ -448,12 +442,12 @@ export default class EvaluatorBase {
         }
 
       default:
-        Utils.throwError(`invalid operator '${node.operator}'`);
+        throwError(`invalid operator '${node.operator}'`);
     }
 
-    Utils.throwError(
-      `${Utils.getObjKey(ValueType, Utils.getType(left))} ` +
-        `and ${Utils.getObjKey(ValueType, Utils.getType(right))} ` +
+    throwError(
+      `${getObjKey(ValueType, getType(left))} ` +
+        `and ${getObjKey(ValueType, getType(right))} ` +
         `is invalid operand types or sequence for operator '${node.operator}'`,
       node.$loc
     );
@@ -593,10 +587,21 @@ export default class EvaluatorBase {
 
   _getNumberArithmeticFunc(operator) {
     if (!['+', '-', '*', '/'].includes(operator)) {
-      Utils.throwError(`invalid arithmetic operator provided: '${operator}'`);
+      throwError(`invalid arithmetic operator provided: '${operator}'`);
     }
 
-    return eval(`(function(a, b) { return a ${operator} b; })`);
+    switch (operator) {
+      case '+':
+        return (a, b) => a + b;
+      case '-':
+        return (a, b) => a - b;
+      case '*':
+        return (a, b) => a * b;
+      case '/':
+        return (a, b) => a / b;
+      default:
+        throwError(`invalid arithmetic operator provided: '${operator}'`);
+    }
   }
 
   _manageParam(node, defs) {
@@ -627,7 +632,7 @@ export default class EvaluatorBase {
         if (method) {
           const result = method.call(def, node);
           if (result === void 0) {
-            Utils.throwError(
+            throwError(
               `operation '${opName}' for parameter '${node.name}' is not supported by '${this.$type}'`,
               node.$loc
             );
@@ -635,7 +640,7 @@ export default class EvaluatorBase {
 
           return result;
         } else {
-          Utils.throwError(
+          throwError(
             `operation '${opName}' is not supported for parameter '${node.name}'`,
             node.$loc
           );
@@ -645,7 +650,7 @@ export default class EvaluatorBase {
       }
     }
 
-    Utils.throwError(`unknown parameter name '${node.name}'`, node.$loc);
+    throwError(`unknown parameter name '${node.name}'`, node.$loc);
   }
 
   _getColorParamDefs() {
@@ -662,7 +667,7 @@ export default class EvaluatorBase {
         re: /^((rgb|cmyk|hsl|hsv|hsi|lab|lch|hcl)\.)?(luminance|lum)$/i,
         manage: node => {
           if (node.value === void 0 && node.name.match(/\./)) {
-            Utils.throwError(
+            throwError(
               'color space should not be specified when retrieving luminance',
               node.$loc
             );

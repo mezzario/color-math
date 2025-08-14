@@ -1,4 +1,4 @@
-export default class LocPos {
+export class LocPos {
   constructor(ln, col, i) {
     this.ln = ln;
     this.col = col;

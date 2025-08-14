@@ -1,13 +1,12 @@
 ﻿/*eslint no-console: "off"*/
 
-import * as ReadLine from 'readline';
-const Chalk = require('chalk');
-import * as ColorMath from './src';
-const { LessEvaluator, CoreEvaluator } = ColorMath.Evaluators;
+import {createInterface} from 'readline';
+import Chalk from 'chalk';
+import {evaluate, LessEvaluator, CoreEvaluator} from './src/index.js';
 
 const lessEval = new LessEvaluator();
 
-const rl = ReadLine.createInterface({
+const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
   terminal: false,
@@ -17,11 +16,11 @@ rl.setPrompt('> ');
 rl.prompt();
 
 rl.on('line', line => {
-  const flags = { withAst: false, less: false };
+  const flags = {withAst: false, less: false};
   line = parseFlags(line, flags);
 
   if (line) {
-    const res = ColorMath.evaluate(line, {
+    const res = evaluate(line, {
       evaluator: flags.less ? lessEval : CoreEvaluator.instance,
       withAst: flags.withAst,
     });

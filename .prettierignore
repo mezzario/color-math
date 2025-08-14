@@ -3,4 +3,6 @@ dist/
 lib/
 es/
 src/parser.js
+src/parser.generated.js
+src/parser.template.js
 *.md

@@ -1,4 +1,4 @@
-export default {
+export const ValueType = {
   Number: 1 << 0,
   Color: 1 << 1,
   ColorScale: 1 << 2,

@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class RandomColorExpr extends Expr {
+export class RandomColorExpr extends Expr {
   constructor($loc) {
     super('randomColor', $loc);
   }

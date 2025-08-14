@@ -1,10 +1,10 @@
-import { describe, it } from 'mocha';
-import expect from 'expect';
-import * as ColorMath from '../src';
+import {describe, it} from 'mocha';
+import {expect} from 'expect';
+import {evaluate} from '../index.js';
 
 describe('CoreEvaluator', () => {
   const expr = (e, r) => {
-    const result = ColorMath.evaluate(e);
+    const result = evaluate(e);
 
     if (result.error) {
       throw new Error(result.error);

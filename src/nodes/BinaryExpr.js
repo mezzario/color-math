@@ -1,6 +1,6 @@
-import OperationExpr from './OperationExpr';
+import {OperationExpr} from './OperationExpr.js';
 
-export default class BinaryExpr extends OperationExpr {
+export class BinaryExpr extends OperationExpr {
   constructor(left, right, operator, options, $loc) {
     super('binary', operator, options, $loc);
 

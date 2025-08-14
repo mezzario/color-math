@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class ColorHexLiteralExpr extends Expr {
+export class ColorHexLiteralExpr extends Expr {
   constructor(value, $loc) {
     super('colorHexLiteral', $loc);
 

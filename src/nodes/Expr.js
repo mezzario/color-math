@@ -1,6 +1,6 @@
-import Node from './Node';
+import {Node} from './Node.js';
 
-export default class Expr extends Node {
+export class Expr extends Node {
   constructor($type, $loc) {
     super(`expr.${$type}`, $loc);
   }

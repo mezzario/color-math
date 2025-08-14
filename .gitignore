@@ -4,3 +4,5 @@ dist/
 es/
 .DS_Store
 *.log
+
+/src/parser.generated.js

@@ -1,10 +1,10 @@
-﻿import EvaluatorBase from './EvaluatorBase';
-import * as Utils from '../utils';
-import BlendMode from '../BlendMode';
-import { PercentExpr, NumberLiteralExpr } from '../nodes';
-import CoreEvaluator from './CoreEvaluator';
+﻿import {EvaluatorBase} from './EvaluatorBase.js';
+import {throwError, getObjKey} from '../utils.js';
+import {BlendMode} from '../BlendMode.js';
+import {PercentExpr, NumberLiteralExpr} from '../nodes/index.js';
+import {CoreEvaluator} from './CoreEvaluator.js';
 
-export default class LessEvaluator extends EvaluatorBase {
+export class LessEvaluator extends EvaluatorBase {
   constructor() {
     super('less');
   }
@@ -75,21 +75,18 @@ export default class LessEvaluator extends EvaluatorBase {
   }
 
   evalColorByNumber(node) {
-    Utils.throwError(
-      'defining color by number is not supported by LESS',
-      node.$loc
-    );
+    throwError('defining color by number is not supported by LESS', node.$loc);
   }
 
   evalColorByTemperature(node) {
-    Utils.throwError(
+    throwError(
       'defining color by temperature is not supported by LESS',
       node.$loc
     );
   }
 
   evalColorByWavelength(node) {
-    Utils.throwError(
+    throwError(
       'defining color by wavelength is not supported by LESS',
       node.$loc
     );
@@ -191,7 +188,7 @@ export default class LessEvaluator extends EvaluatorBase {
   }
 
   evalColorsContrast(node) {
-    Utils.throwError(
+    throwError(
       'calculating numeric contrast value is not supported by LESS',
       node.$loc
     );
@@ -210,7 +207,7 @@ export default class LessEvaluator extends EvaluatorBase {
 
     const mode = (node.options || {}).mode;
     if (mode && mode !== 'rgb') {
-      Utils.throwError(
+      throwError(
         'LESS supports mixing colors only in RGB color space',
         node.$loc
       );
@@ -299,14 +296,11 @@ export default class LessEvaluator extends EvaluatorBase {
   }
 
   evalManageColorNumber(node) {
-    Utils.throwError(
-      'defining color by number is not supported by LESS',
-      node.$loc
-    );
+    throwError('defining color by number is not supported by LESS', node.$loc);
   }
 
   evalManageColorTemperature(node) {
-    Utils.throwError(
+    throwError(
       'defining color by temperature is not supported by LESS',
       node.$loc
     );
@@ -318,7 +312,7 @@ export default class LessEvaluator extends EvaluatorBase {
     if (node.value === void 0) {
       res = `luma(${this._unwrapParens(node.obj).evaluate(this)})`;
     } else {
-      Utils.throwError(`setting luminance is not supported by LESS`, node.$loc);
+      throwError(`setting luminance is not supported by LESS`, node.$loc);
     }
 
     return res;
@@ -337,7 +331,7 @@ export default class LessEvaluator extends EvaluatorBase {
       } else if (!node.operator) {
         res = this._funcOp(node.obj, node.value, 'fade', true);
       } else {
-        Utils.throwError(
+        throwError(
           `assignment operator '${node.operator}=' for alpha channel is not supported by LESS`,
           node.$loc
         );
@@ -504,7 +498,7 @@ export default class LessEvaluator extends EvaluatorBase {
       const res = `${func}(${node.obj.evaluate(this)})`;
       return res;
     } else {
-      Utils.throwError(
+      throwError(
         `setting components in ${space.toUpperCase()} color space is not supported by LESS`,
         node.$loc
       );
@@ -512,19 +506,19 @@ export default class LessEvaluator extends EvaluatorBase {
   }
 
   _unspColorScale(loc) {
-    Utils.throwError('color scales are not supported by LESS', loc);
+    throwError('color scales are not supported by LESS', loc);
   }
 
   _unspColorSpace(space, loc) {
-    Utils.throwError(
+    throwError(
       `color space '${space.toUpperCase()}' is not supported by LESS`,
       loc
     );
   }
 
   _unspColorBlend(mode, loc) {
-    Utils.throwError(
-      `'${Utils.getObjKey(BlendMode, mode)}' blending function is not supported by LESS`,
+    throwError(
+      `'${getObjKey(BlendMode, mode)}' blending function is not supported by LESS`,
       loc
     );
   }

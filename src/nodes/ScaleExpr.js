@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class ScaleExpr extends Expr {
+export class ScaleExpr extends Expr {
   constructor(colors, domain, mode, $loc) {
     super('scale', $loc);
 

@@ -1,6 +1,6 @@
-import OperationExpr from './OperationExpr';
+import {OperationExpr} from './OperationExpr.js';
 
-export default class UnaryExpr extends OperationExpr {
+export class UnaryExpr extends OperationExpr {
   constructor(value, operator, options, $loc) {
     super('unary', operator, options, $loc);
 

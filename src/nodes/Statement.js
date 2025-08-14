@@ -1,6 +1,6 @@
-import Node from './Node';
+import {Node} from './Node.js';
 
-export default class Statement extends Node {
+export class Statement extends Node {
   constructor(expr, $loc) {
     super('statement', $loc);
 

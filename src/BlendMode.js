@@ -1,4 +1,4 @@
-export default {
+export const BlendMode = {
   None: 0,
   Replace: 1,
 

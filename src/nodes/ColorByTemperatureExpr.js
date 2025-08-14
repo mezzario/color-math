@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class ColorByTemperatureExpr extends Expr {
+export class ColorByTemperatureExpr extends Expr {
   constructor(value, $loc) {
     super('colorByTemperature', $loc);
 

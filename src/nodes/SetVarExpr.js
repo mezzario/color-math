@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class SetVarExpr extends Expr {
+export class SetVarExpr extends Expr {
   constructor(name, value, $loc) {
     super('setVar', $loc);
 

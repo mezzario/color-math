@@ -1,6 +1,6 @@
-import ParamExpr from './ParamExpr';
+import {ParamExpr} from './ParamExpr.js';
 
-export default class GetParamExpr extends ParamExpr {
+export class GetParamExpr extends ParamExpr {
   constructor(obj, name, $loc) {
     super('getParam', obj, name, void 0, void 0, $loc);
   }

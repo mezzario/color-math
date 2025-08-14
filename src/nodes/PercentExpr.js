@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class PercentExpr extends Expr {
+export class PercentExpr extends Expr {
   constructor(value, $loc) {
     super('percent', $loc);
 

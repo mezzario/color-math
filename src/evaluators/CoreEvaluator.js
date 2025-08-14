@@ -1,9 +1,21 @@
-const Chroma = require('chroma-js');
-import EvaluatorBase from './EvaluatorBase';
-import ColorScale from '../ColorScale';
-import * as Utils from '../utils';
-import ValueType from '../ValueType';
-import BlendMode from '../BlendMode';
+import chroma from 'chroma-js';
+import {EvaluatorBase} from './EvaluatorBase.js';
+import {ColorScale} from '../ColorScale.js';
+import {
+  blendColors,
+  cloneValue,
+  cmyToCmykArray,
+  colorArithmeticOp,
+  colorFromWavelength,
+  forceNumInRange,
+  forceRange,
+  forceType,
+  getColorSpaceParamsValidRanges,
+  inverseColor,
+  throwError,
+} from '../utils.js';
+import {ValueType} from '../ValueType.js';
+import {BlendMode} from '../BlendMode.js';
 
 const VarOp = {
   Store: 0,
@@ -11,7 +23,7 @@ const VarOp = {
   Delete: 2,
 };
 
-export default class CoreEvaluator extends EvaluatorBase {
+export class CoreEvaluator extends EvaluatorBase {
   constructor() {
     super('core');
   }
@@ -41,7 +53,7 @@ export default class CoreEvaluator extends EvaluatorBase {
 
   evalParentheses(node) {
     let value = node.expr.evaluate(this);
-    value = Utils.cloneValue(value);
+    value = cloneValue(value);
 
     return value;
   }
@@ -55,7 +67,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalPercent(node) {
-    const value = Utils.forceNumInRange(
+    const value = forceNumInRange(
       node.value.evaluate(this),
       -100,
       100,
@@ -73,66 +85,61 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalArrayElement(node) {
-    const array = Utils.forceType(
+    const array = forceType(
       node.obj.evaluate(this),
       ValueType.Array,
       node.obj.$loc
     );
-    const index = Utils.forceNumInRange(
-      +node.name,
-      0,
-      array.length - 1,
-      node.$loc
-    );
+    const index = forceNumInRange(+node.name, 0, array.length - 1, node.$loc);
     const value = array[index];
 
     return value;
   }
 
   evalColorNameLiteral(node) {
-    const value = Chroma(node.value);
+    const value = chroma(node.value);
 
     return value;
   }
 
   evalColorHexLiteral(node) {
-    const value = Chroma(node.value);
+    const value = chroma(node.value);
 
     return value;
   }
 
   evalColorByNumber(node) {
-    const n = Utils.forceNumInRange(
+    const n = forceNumInRange(
       node.value.evaluate(this),
       0,
       0xffffff,
       node.value.$loc
     );
-    const value = Chroma(n);
+    const value = chroma(n);
 
     return value;
   }
 
   evalColorByTemperature(node) {
-    const temperature = Utils.forceNumInRange(
+    const temperature = forceNumInRange(
       node.value.evaluate(this),
       0,
       200000,
       node.value.$loc
     );
-    const value = Chroma.temperature(temperature);
+    const value = chroma.temperature(temperature);
 
     return value;
   }
 
   evalColorByWavelength(node) {
-    const wl = Utils.forceNumInRange(
+    const wl = forceNumInRange(
       node.value.evaluate(this),
       350,
       780,
       node.value.$loc
     );
-    const value = Utils.colorFromWavelength(wl);
+    const value = colorFromWavelength(wl);
 
     return value;
   }
@@ -153,33 +160,33 @@ export default class CoreEvaluator extends EvaluatorBase {
       alphaExpr = paramExprs.pop();
     }
 
-    const ranges = Utils.getColorSpaceParamsValidRanges(space);
+    const ranges = getColorSpaceParamsValidRanges(space);
 
     if (params.length !== ranges.length) {
-      Utils.throwError(
+      throwError(
         `invalid number of params for color space ${node.space.toUpperCase()}`,
         node.$loc
       );
     }
 
     for (let i = 0; i < params.length; i++) {
-      Utils.forceNumInRange(params[i], ranges[i], paramExprs[i].$loc);
+      forceNumInRange(params[i], ranges[i], paramExprs[i].$loc);
     }
 
     if (space === 'cmy') {
-      params = Utils.cmyToCmykArray(params);
+      params = cmyToCmykArray(params);
       space = 'cmyk';
     }
 
-    let value = Chroma(params, space);
+    let value = chroma(params, space);
     if (alpha != null) {
-      value = value.alpha(Utils.forceNumInRange(alpha, 0, 1, alphaExpr.$loc));
+      value = value.alpha(forceNumInRange(alpha, 0, 1, alphaExpr.$loc));
     }
     return value;
   }
 
   evalRandomColor(/*node*/) {
-    const value = Chroma.random();
+    const value = chroma.random();
 
     return value;
   }
@@ -187,29 +194,29 @@ export default class CoreEvaluator extends EvaluatorBase {
   evalScale(node) {
     const colors = Array.isArray(node.colors)
       ? node.colors.map(expr =>
-          Utils.forceType(expr.evaluate(this), ValueType.Color, expr.$loc)
+          forceType(expr.evaluate(this), ValueType.Color, expr.$loc)
         )
-      : Utils.forceType(
+      : forceType(
           node.colors.evaluate(this),
           ValueType.ColorArray,
           node.colors.$loc
         );
 
     if (colors && colors.length < 2) {
-      Utils.throwError('two or more colors are required for interpolation');
+      throwError('two or more colors are required for interpolation');
     }
 
-    const scaleParams = [{ name: 'colors', value: colors }];
+    const scaleParams = [{name: 'colors', value: colors}];
 
     if (node.domain !== void 0) {
       const domain = node.domain.map(expr =>
-        Utils.forceType(expr.evaluate(this), ValueType.Number, expr.$loc)
+        forceType(expr.evaluate(this), ValueType.Number, expr.$loc)
       );
-      scaleParams.push({ name: 'domain', value: domain });
+      scaleParams.push({name: 'domain', value: domain});
     }
 
     if (node.mode !== void 0) {
-      scaleParams.push({ name: 'mode', value: node.mode });
+      scaleParams.push({name: 'mode', value: node.mode});
     }
 
     const value = new ColorScale('scale', void 0, scaleParams);
@@ -218,7 +225,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalBezier(node) {
-    const colors = Utils.forceType(
+    const colors = forceType(
       node.colors.evaluate(this),
       ValueType.ColorArray,
       node.colors.$loc
@@ -227,12 +234,12 @@ export default class CoreEvaluator extends EvaluatorBase {
     const colorsMax = 5;
 
     if (colors.length < colorsMin || colors.length > colorsMax) {
-      Utils.throwError(
+      throwError(
         `bezier interpolate supports from ${colorsMin} to ${colorsMax} colors, you provided: ${colors.length}`
       );
     }
 
-    const scaleParams = [{ name: 'colors', value: colors }];
+    const scaleParams = [{name: 'colors', value: colors}];
     const value = new ColorScale('bezier', void 0, scaleParams);
 
     return value;
@@ -247,13 +254,13 @@ export default class CoreEvaluator extends EvaluatorBase {
   evalBrewerConst(node) {
     const dict = CoreEvaluator._getBrewerConstsDict();
     const colorStrs = dict[node.name.toLowerCase()];
-    const colors = colorStrs.map(s => Chroma(s));
+    const colors = colorStrs.map(s => chroma(s));
 
     return colors;
   }
 
   evalUnaryMinus(node) {
-    let value = Utils.forceType(
+    let value = forceType(
       node.value.evaluate(this),
       ValueType.Number,
       node.value.$loc
@@ -264,24 +271,24 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalColorInverse(node) {
-    let value = Utils.forceType(
+    let value = forceType(
       node.value.evaluate(this),
       ValueType.Color,
       node.value.$loc
     );
-    value = Utils.inverseColor(value);
+    value = inverseColor(value);
 
     return value;
   }
 
   evalCorrectLightness(node) {
-    let value = Utils.forceType(
+    let value = forceType(
       node.value.evaluate(this),
       ValueType.ColorScale,
       node.value.$loc
     );
     value = value.clone();
-    value.scaleParams.push({ name: 'correctLightness' });
+    value.scaleParams.push({name: 'correctLightness'});
 
     return value;
   }
@@ -323,7 +330,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   evalColorsContrast(node) {
     const left = node.left.evaluate(this);
     const right = node.right.evaluate(this);
-    const value = Chroma.contrast(left, right);
+    const value = chroma.contrast(left, right);
 
     return value;
   }
@@ -333,21 +340,17 @@ export default class CoreEvaluator extends EvaluatorBase {
     const right = node.right.evaluate(this);
     const ratioExpr = (node.options || {}).ratio;
     const ratio = ratioExpr
-      ? Utils.forceType(
-          ratioExpr.evaluate(this),
-          ValueType.Number,
-          ratioExpr.$loc
-        )
+      ? forceType(ratioExpr.evaluate(this), ValueType.Number, ratioExpr.$loc)
       : void 0;
     const mode = (node.options || {}).mode || 'rgb';
-    const value = Chroma.mix(left, right, ratio, mode);
+    const value = chroma.mix(left, right, ratio, mode);
 
     return value;
   }
 
   evalColorsFromScaleProduction(node) {
     const left = node.left.evaluate(this);
-    const right = Utils.forceNumInRange(
+    const right = forceNumInRange(
       node.right.evaluate(this),
       2,
       0xffff,
@@ -356,7 +359,7 @@ export default class CoreEvaluator extends EvaluatorBase {
     const value = left
       .getFn()
       .colors(right)
-      .map(s => Chroma(s));
+      .map(s => chroma(s));
 
     return value;
   }
@@ -429,7 +432,7 @@ export default class CoreEvaluator extends EvaluatorBase {
       return curValue;
     } else {
       // set
-      let value = Utils.forceNumInRange(
+      let value = forceNumInRange(
         node.value.evaluate(this),
         0,
         0xffffff,
@@ -446,7 +449,7 @@ export default class CoreEvaluator extends EvaluatorBase {
         );
       }
 
-      let obj = Chroma(value);
+      let obj = chroma(value);
       obj = obj.alpha(curObj.alpha());
       return obj;
     }
@@ -458,7 +461,7 @@ export default class CoreEvaluator extends EvaluatorBase {
     if (node.value === void 0) {
       return curValue;
     } else {
-      let value = Utils.forceType(
+      let value = forceType(
         node.value.evaluate(this),
         ValueType.Number,
         node.value.$loc
@@ -467,19 +470,19 @@ export default class CoreEvaluator extends EvaluatorBase {
         value = this._getNumberArithmeticFunc(node.operator)(curValue, value);
       }
 
-      const obj = Chroma.temperature(value);
+      const obj = chroma.temperature(value);
       return obj;
     }
   }
 
   evalManageColorLuminance(node) {
-    const obj = Utils.cloneValue(node.obj.evaluate(this));
+    const obj = cloneValue(node.obj.evaluate(this));
     const curValue = obj.luminance();
 
     if (node.value === void 0) {
       return curValue;
     } else {
-      let value = Utils.forceNumInRange(
+      let value = forceNumInRange(
         node.value.evaluate(this),
         0,
         1,
@@ -498,24 +501,19 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalManageColorAlpha(node) {
-    let obj = Utils.cloneValue(node.obj.evaluate(this));
+    let obj = cloneValue(node.obj.evaluate(this));
     const curValue = obj.alpha();
 
     if (node.value === void 0) {
       return curValue;
     } else {
       let value = ['*', '/'].includes(node.operator)
-        ? Utils.forceType(
+        ? forceType(
             node.value.evaluate(this),
             ValueType.Number,
             node.value.$loc
           )
-        : Utils.forceNumInRange(
-            node.value.evaluate(this),
-            0,
-            1,
-            node.value.$loc
-          );
+        : forceNumInRange(node.value.evaluate(this), 0, 1, node.value.$loc);
 
       if (node.operator) {
         value = this._getNumberArithmeticFunc(node.operator)(curValue, value);
@@ -527,17 +525,17 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   manageColorCompOp(node, comp) {
-    let obj = Utils.cloneValue(node.obj.evaluate(this));
+    let obj = cloneValue(node.obj.evaluate(this));
     const curValue = obj.get(comp);
 
     if (node.value === void 0) {
       return curValue;
     } else {
       const parts = comp.split('.');
-      const ranges = Utils.getColorSpaceParamsValidRanges(parts[0]);
+      const ranges = getColorSpaceParamsValidRanges(parts[0]);
       const index = parts[0].indexOf(parts[1]);
       const range = ranges[index];
-      let value = Utils.forceNumInRange(
+      let value = forceNumInRange(
         node.value.evaluate(this),
         range,
         node.value.$loc
@@ -629,23 +627,21 @@ export default class CoreEvaluator extends EvaluatorBase {
     let value = node.value.evaluate(this);
 
     value = Array.isArray(value)
-      ? Utils.forceRange(value, node.value.$loc)
-      : Utils.forceType(value, ValueType.Number, node.value.$loc);
+      ? forceRange(value, node.value.$loc)
+      : forceType(value, ValueType.Number, node.value.$loc);
 
     const obj = this._addColorScaleParam(node, true, 'padding', value);
     return obj;
   }
 
   evalSetScaleDomain(node) {
-    const value = Utils.forceType(
+    const value = forceType(
       node.value.evaluate(this),
       ValueType.NumberArray,
       node.value.$loc
     );
     if (value.length < 2) {
-      Utils.throwError(
-        "'domain' parameter should contain at least two elements"
-      );
+      throwError("'domain' parameter should contain at least two elements");
     }
 
     const obj = this._addColorScaleParam(node, true, 'domain', value);
@@ -653,7 +649,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalSetCubehelixStart(node) {
-    const value = Utils.forceNumInRange(
+    const value = forceNumInRange(
       node.value.evaluate(this),
       0,
       360,
@@ -665,7 +661,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalSetCubehelixRotations(node) {
-    const value = Utils.forceType(
+    const value = forceType(
       node.value.evaluate(this),
       ValueType.Number,
       node.value.$loc
@@ -679,8 +675,8 @@ export default class CoreEvaluator extends EvaluatorBase {
     let value = node.value.evaluate(this);
 
     value = Array.isArray(value)
-      ? Utils.forceRange(value, node.value.$loc)
-      : Utils.forceType(value, ValueType.Number, node.value.$loc);
+      ? forceRange(value, node.value.$loc)
+      : forceType(value, ValueType.Number, node.value.$loc);
 
     const obj = this._addColorScaleParam(node, false, 'hue', value);
 
@@ -688,7 +684,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalSetCubehelixGamma(node) {
-    const value = Utils.forceType(
+    const value = forceType(
       node.value.evaluate(this),
       ValueType.Number,
       node.value.$loc
@@ -699,9 +695,9 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   evalSetCubehelixLightness(node) {
-    const value = Utils.forceRange(node.value.evaluate(this), node.value.$loc);
+    const value = forceRange(node.value.evaluate(this), node.value.$loc);
     if (value[0] === value[1]) {
-      Utils.throwError("empty 'lightness' range");
+      throwError("empty 'lightness' range");
     }
 
     const obj = this._addColorScaleParam(node, false, 'lightness', value);
@@ -732,14 +728,14 @@ export default class CoreEvaluator extends EvaluatorBase {
       case VarOp.Store:
         dict[name2] = value;
         if (value === void 0) {
-          Utils.throwError(`cannot assign undefined value to variable ${name}`);
+          throwError(`cannot assign undefined value to variable ${name}`);
         }
         break;
 
       case VarOp.Retrieve:
         value = dict[name2];
         if (value === void 0) {
-          Utils.throwError(`variable ${name} is not defined`);
+          throwError(`variable ${name} is not defined`);
         }
         break;
 
@@ -758,9 +754,9 @@ export default class CoreEvaluator extends EvaluatorBase {
     if (!dict) {
       dict = Object.create(null);
 
-      for (const key in Chroma.brewer) {
-        if (key in Chroma.brewer) {
-          dict[key.toLowerCase()] = Chroma.brewer[key];
+      for (const key in chroma.brewer) {
+        if (key in chroma.brewer) {
+          dict[key.toLowerCase()] = chroma.brewer[key];
         }
       }
 
@@ -781,7 +777,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   _blendColorsOp(node, mode) {
     const left = node.left.evaluate(this);
     const right = node.right.evaluate(this);
-    const value = Utils.blendColors(left, right, mode);
+    const value = blendColors(left, right, mode);
 
     return value;
   }
@@ -789,20 +785,20 @@ export default class CoreEvaluator extends EvaluatorBase {
   _colorArithmeticOp(node) {
     const left = node.left.evaluate(this);
     const right = node.right.evaluate(this);
-    const value = Utils.colorArithmeticOp(left, right, node.operator);
+    const value = colorArithmeticOp(left, right, node.operator);
 
     return value;
   }
 
   _adjustColorCompOp(node, colorComp, add) {
     const left = node.left.evaluate(this);
-    const right = Utils.forceNumInRange(
+    const right = forceNumInRange(
       node.right.evaluate(this),
       0,
       1,
       node.right.$loc
     );
-    const value = Utils.cloneValue(left).set(
+    const value = cloneValue(left).set(
       colorComp,
       `*${!add ? 1 - right : 1 + right}`
     );
@@ -811,7 +807,7 @@ export default class CoreEvaluator extends EvaluatorBase {
   }
 
   _addColorScaleParam(node, scaleParams, name, value) {
-    const obj = Utils.cloneValue(node.obj.evaluate(this));
+    const obj = cloneValue(node.obj.evaluate(this));
     const params = scaleParams ? obj.scaleParams : obj.params;
 
     for (let i = 0; i < params.length; i++) {

@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class ParenthesesExpr extends Expr {
+export class ParenthesesExpr extends Expr {
   constructor(expr, $loc) {
     super('parentheses', $loc);
 

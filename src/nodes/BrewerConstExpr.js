@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class BrewerConstExpr extends Expr {
+export class BrewerConstExpr extends Expr {
   constructor(name, $loc) {
     super('brewerConst', $loc);
 

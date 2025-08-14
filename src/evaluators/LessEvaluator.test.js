@@ -1,16 +1,14 @@
-import { describe, it } from 'mocha';
-import expect from 'expect';
-import * as ColorMath from '../src';
-
-const getLessEvaluator = (
-  e => () =>
-    e || (e = new ColorMath.Evaluators.LessEvaluator())
-)();
+import {describe, it} from 'mocha';
+import {expect} from 'expect';
+import {evaluate} from '../index.js';
+import {LessEvaluator} from './LessEvaluator.js';
 
 describe('LessEvaluator', () => {
+  const lessEvaluator = new LessEvaluator();
+
   const expr = (e, r) => {
-    const result = ColorMath.evaluate(e, {
-      evaluator: getLessEvaluator(),
+    const result = evaluate(e, {
+      evaluator: lessEvaluator,
     });
 
     if (result.error) {

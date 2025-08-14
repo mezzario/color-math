@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class BezierExpr extends Expr {
+export class BezierExpr extends Expr {
   constructor(colors, $loc) {
     super('bezier', $loc);
 

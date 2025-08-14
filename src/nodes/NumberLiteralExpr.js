@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class NumberLiteralExpr extends Expr {
+export class NumberLiteralExpr extends Expr {
   constructor(value, $loc) {
     super('numberLiteral', $loc);
 

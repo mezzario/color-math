@@ -3,42 +3,9 @@
     [
       "@babel/preset-env",
       {
-        "modules": false
+        "modules": "commonjs"
       }
     ]
   ],
-  "plugins": [
-    "@babel/plugin-transform-class-properties"
-  ],
-  "ignore": [
-    "src/parser.js"
-  ],
-  "env": {
-    "commonjs": {
-      "presets": [
-        [
-          "@babel/preset-env",
-          {
-            "modules": "commonjs"
-          }
-        ]
-      ],
-      "plugins": [
-        "@babel/plugin-transform-class-properties"
-      ]
-    },
-    "test": {
-      "presets": [
-        [
-          "@babel/preset-env",
-          {
-            "modules": "commonjs"
-          }
-        ]
-      ],
-      "plugins": [
-        "@babel/plugin-transform-class-properties"
-      ]
-    }
-  }
+  "ignore": ["src/parser.js"]
 }

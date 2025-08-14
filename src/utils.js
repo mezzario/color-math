@@ -1,7 +1,7 @@
-﻿const Chroma = require('chroma-js');
-import ColorScale from './ColorScale';
-import BlendMode from './BlendMode';
-import ValueType from './ValueType';
+﻿import chroma from 'chroma-js';
+import {ColorScale} from './ColorScale.js';
+import {BlendMode} from './BlendMode.js';
+import {ValueType} from './ValueType.js';
 
 const getColorBlender = (() => {
   const bs = {};
@@ -63,7 +63,7 @@ export function blendColors(bg, fg, mode) {
     resComps[i] = c * 255;
   }
 
-  const color = Chroma(resComps);
+  const color = chroma(resComps);
   return color;
 }
 
@@ -102,7 +102,7 @@ export function cmyToCmykArray(valuesOrC, m, y) {
 
 export function cmyToCmyk(c, m, y) {
   const values = cmyToCmykArray(c, m, y);
-  const color = Chroma(values, 'cmyk');
+  const color = chroma(values, 'cmyk');
 
   return color;
 }
@@ -146,7 +146,7 @@ export function roundColorComps(color, space = 'rgb') {
     }
   }
 
-  let res = Chroma(comps, space);
+  let res = chroma(comps, space);
   res = res.alpha(color.alpha());
   return res;
 }
@@ -273,7 +273,7 @@ export function colorFromWavelength(wl) {
     a = (wl - 380) / (420 - 380);
   }
 
-  const color = Chroma([r, g, b, a], 'gl');
+  const color = chroma([r, g, b, a], 'gl');
 
   return color;
 }
@@ -352,7 +352,7 @@ export function cloneValue(value) {
 
   switch (type) {
     case ValueType.Color:
-      return Chroma(value.rgba());
+      return chroma(value.rgba());
 
     case ValueType.ColorScale:
       return value.clone();

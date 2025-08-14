@@ -1,6 +1,6 @@
-const Chroma = require('chroma-js');
+import chroma from 'chroma-js';
 
-export default class ColorScale {
+export class ColorScale {
   constructor(name, params, scaleParams) {
     this.name = name.toLowerCase();
     this.params = params || [];
@@ -38,7 +38,7 @@ export default class ColorScale {
 
   getFn() {
     const colors = this._getParamValue(this.scaleParams, 'colors');
-    const ctor = Chroma[this.name];
+    const ctor = chroma[this.name];
     let fn = colors ? ctor(colors) : ctor();
 
     this._applyParams(fn, this.params);

@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class ParamExpr extends Expr {
+export class ParamExpr extends Expr {
   constructor($type, obj, name, value, operator, $loc) {
     super($type, $loc);
 

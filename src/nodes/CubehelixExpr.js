@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class CubehelixExpr extends Expr {
+export class CubehelixExpr extends Expr {
   constructor($loc) {
     super('cubehelix', $loc);
   }

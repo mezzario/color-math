@@ -1,17 +1,19 @@
-﻿import * as Utils from './utils';
-import * as Evaluators from './evaluators';
-import * as Nodes from './nodes';
-import * as Parser from './parser';
-import ColorScale from './ColorScale';
-import ValueType from './ValueType';
-import BlendMode from './BlendMode';
+import {isColor, formatColor} from './utils.js';
+import {EvaluatorBase} from './evaluators/EvaluatorBase.js';
+import {CoreEvaluator} from './evaluators/CoreEvaluator.js';
+import {LessEvaluator} from './evaluators/LessEvaluator.js';
+import {Nodes} from './nodes/index.js';
+import {parser} from './parser.js';
+import {ColorScale} from './ColorScale.js';
+import {ValueType} from './ValueType.js';
+import {BlendMode} from './BlendMode.js';
 
-Parser.parser.yy = Nodes;
+parser.yy = Nodes;
 
 export function evaluate(expr, options) {
   options = Object.assign(
     {
-      evaluator: Evaluators.CoreEvaluator.instance,
+      evaluator: CoreEvaluator.instance,
       withAst: false,
       astWithLocs: false,
     },
@@ -23,7 +25,7 @@ export function evaluate(expr, options) {
   let error;
 
   try {
-    program = Parser.parse(expr);
+    program = parser.parse(expr);
     value = program.evaluate(options.evaluator);
   } catch (e) {
     error = e.message || String(e);
@@ -46,8 +48,8 @@ export function evaluate(expr, options) {
 }
 
 function formatValue(value) {
-  if (Utils.isColor(value)) {
-    return Utils.formatColor(value);
+  if (isColor(value)) {
+    return formatColor(value);
   } else if (typeof value === 'number') {
     const s =
       value % 1 === 0 ? String(value) : value.toFixed(4).replace(/0+$/, '');
@@ -68,4 +70,12 @@ function formatValue(value) {
   }
 }
 
-export { Nodes, Evaluators, ColorScale, BlendMode, ValueType, Utils };
+export {
+  Nodes,
+  EvaluatorBase,
+  CoreEvaluator,
+  LessEvaluator,
+  ColorScale,
+  BlendMode,
+  ValueType,
+};

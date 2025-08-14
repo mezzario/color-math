@@ -1,6 +1,6 @@
-import Expr from './Expr';
+import {Expr} from './Expr.js';
 
-export default class ColorBySpaceParams extends Expr {
+export class ColorBySpaceParams extends Expr {
   constructor(space, params, $loc) {
     super('colorBySpaceParams', $loc);
 

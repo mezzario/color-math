@@ -1,9 +1,9 @@
-import cloneDeepWith from 'lodash.clonedeepwith';
-import * as Utils from '../utils';
-import Loc from './Loc';
-import ColorScale from '../ColorScale';
+import {cloneDeepWith} from 'lodash.clonedeepwith';
+import {isColor, formatColor, throwError} from '../utils.js';
+import {Loc} from './Loc.js';
+import {ColorScale} from '../ColorScale.js';
 
-export default class Node {
+export class Node {
   constructor($type, $loc) {
     this.$type = $type;
 
@@ -19,8 +19,8 @@ export default class Node {
           return obj.getDto(withLoc);
         } else if (obj instanceof Loc) {
           return this.$loc.toString();
-        } else if (Utils.isColor(obj)) {
-          return Utils.formatColor(obj);
+        } else if (isColor(obj)) {
+          return formatColor(obj);
         } else if (obj instanceof ColorScale) {
           return String(obj);
         }
@@ -38,7 +38,7 @@ export default class Node {
     //if (this.$eval === void 0) {
     const value = this._evaluateInternal(e);
     if (value == null) {
-      Utils.throwError(
+      throwError(
         `evaluation of '${this.$type}' is not supported by '${e.$type}'`,
         this.$loc
       );
