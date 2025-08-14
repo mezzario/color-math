@@ -2,7 +2,7 @@
 
 import {createInterface} from 'readline';
 import Chalk from 'chalk';
-import {evaluate, LessEvaluator, CoreEvaluator} from './src/index.js';
+import {evaluate, LessEvaluator, CoreEvaluator} from './es/index.js';
 
 const lessEval = new LessEvaluator();
 

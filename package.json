@@ -22,14 +22,14 @@
     "index.d.ts"
   ],
   "scripts": {
-    "start": "node repl.js",
+    "start": "npm run build && node repl.js",
     "clean": "node scripts/clean.mjs",
     "prepublishOnly": "npm run clean && npm run test && npm run build",
     "lint": "npm run format:check && eslint src scripts *.js",
     "lint:fix": "npm run format && eslint src scripts *.js --fix",
     "format": "prettier --write \"src/**/*.js\" \"scripts/**/*.mjs\" \"*.js\" \"*.d.ts\"",
     "format:check": "prettier --check \"src/**/*.js\" \"scripts/**/*.mjs\" \"*.js\" \"*.d.ts\"",
-    "test": "npm run lint && NODE_ENV=test mocha --require @babel/register 'src/**/*.test.js'",
+    "test": "npm run lint && node --test src/**/*.test.js",
     "build:parser": "node node_modules/jison/lib/cli src/grammar.jison -o src/parser.generated.js -p lalr -m js && sed 's/__PARSER_CONTENT__/cat src\\/parser.generated.js/e' src/parser.template.js > src/parser.js",
     "build:lib": "vite build --config vite.lib.config.js --mode cjs && cp src/parser.js lib/parser.cjs",
     "build:es": "vite build --config vite.lib.config.js --mode es && cp src/parser.js es/parser.js",
@@ -65,14 +65,11 @@
     "lodash.clonedeepwith": "^4.5.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.28.0",
-    "@babel/register": "^7.27.1",
     "@eslint/js": "^9.33.0",
     "chalk": "^5.5.0",
     "eslint": "^9.33.0",
     "expect": "^30.0.5",
     "jison": "^0.4.18",
-    "mocha": "^11.7.1",
     "prettier": "^3.6.2",
     "terser": "^5.43.1",
     "vite": "^7.1.2"

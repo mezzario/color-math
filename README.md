@@ -6,25 +6,28 @@
 `npm i color-math -S`
 
 ## Usage Example
+
 ```javascript
-import * as ColorMath from "color-math"
+import {evaluate as cm, LessEvaluator} from "color-math";
 
-// will return color which is result of mixing red and green colors
-const result = ColorMath.evaluate("red | green")
-// prints "#804000" ('result.result' is a chroma.js instance; see link below)
-console.log(result.result.hex())
+// Will return color which is result of mixing red and green colors.
+const result = cm("red | green");
+// Prints "#804000" (`result.result` is a chroma.js instance; see link below).
+console.log(result.result.hex());
 
-// set color's alpha channel to 30%
-result = ColorMath.evaluate("red @a 30%")
-console.log(result.result.css()) // prints "rgba(255, 0, 0, 0.3)"
+// Set color's alpha channel to 30%.
+result = cm("red @a 30%");
+// Prints "rgba(255, 0, 0, 0.3)".
+console.log(result.result.css());
 
-// arithmetic operations with colors and numbers
-result = ColorMath.evaluate("(#222 + #444) / 2")
-console.log(result.resultStr) // prints "#333333"
+// Arithmetic operations with colors and numbers.
+result = cm("(#222 + #444) / 2");
+console.log(result.resultStr); // Prints "#333333".
 
-// transpile to Less
-result = ColorMath.evaluate("rgb 165 42 42 >> .2", { evaluator: new ColorMath.Evaluators.LessEvaluator() })
-console.log(result.result) // prints "saturate(rgb(165, 42, 42), 20%, relative)"
+// Transpile to Less.
+result = cm("rgb 165 42 42 >> .2", {evaluator: new LessEvaluator()});
+// Prints "saturate(rgb(165, 42, 42), 20%, relative)".
+console.log(result.result);
 ```
 
 [chroma.js](https://github.com/gka/chroma.js/) color library is used internally to manipulate colors and wrap results.

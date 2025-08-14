@@ -1,4 +1,4 @@
-import {cloneDeepWith} from 'lodash.clonedeepwith';
+import cloneDeepWith from 'lodash.clonedeepwith';
 import {isColor, formatColor, throwError} from '../utils.js';
 import {Loc} from './Loc.js';
 import {ColorScale} from '../ColorScale.js';
