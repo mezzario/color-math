@@ -5,6 +5,7 @@ import {resolve} from 'path';
 export default defineConfig(({mode}) => ({
   logLevel: 'warn',
   build: {
+    target: 'es2018',
     lib: {
       entry: resolve(__dirname, 'src/index.js'),
       formats: [mode === 'cjs' ? 'cjs' : 'es'],

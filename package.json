@@ -1,6 +1,6 @@
 {
   "name": "color-math",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "type": "module",
   "description": "expressions to manipulate colors",
   "main": "lib/index.cjs",
@@ -40,7 +40,7 @@
     "type": "git",
     "url": "git+https://github.com/mezzario/color-math.git"
   },
-  "homepage": "https://github.com/mezzario/color-math",
+  "homepage": "https://colormath.dpdns.org/",
   "keywords": [
     "color",
     "colors",

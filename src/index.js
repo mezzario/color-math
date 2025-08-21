@@ -139,4 +139,6 @@ export {
   ColorScale,
   BlendMode,
   ValueType,
+  isColor,
+  formatColor,
 };
